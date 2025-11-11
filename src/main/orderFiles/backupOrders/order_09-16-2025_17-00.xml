@@ -1,7 +1,10 @@
 <Orders>
     <Order id="1758060000000">
         <OrderType>dine-in</OrderType>
-        <Tip type="dollars">4.97</Tip>
+        <Tip>
+            <KitchenTip type="dollars">1.99</KitchenTip>
+            <ServerTip type="dollars">2.98</ServerTip>
+        </Tip>
         <Item type="Root Beer Float">
             <Price>5.29</Price>
             <Quantity>1</Quantity>
