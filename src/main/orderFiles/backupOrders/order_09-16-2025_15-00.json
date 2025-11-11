@@ -1,7 +1,7 @@
 {
 	"order": {
-		"type": "pickup",
-		"order_date": 1758036600000,
+		"type": "delivery",
+		"order_date": 1758052800000,
 		"items": [
 			{
 				"name": "Burger",

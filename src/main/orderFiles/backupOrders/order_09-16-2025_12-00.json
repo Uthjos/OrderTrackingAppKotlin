@@ -1,22 +1,17 @@
 {
 	"order": {
-		"type": "togo",
-		"order_date": 1758034800000,
+		"type": "pickup",
+		"order_date": 1758042000000,
 		"items": [
 			{
-				"name": "Chili",
+				"name": "Grilled Cheese",
 				"quantity": 2,
 				"price": 4.39
 			},
 			{
-				"name": "Garden Side Salad",
+				"name": "Smoothie",
 				"quantity": 2,
-				"price": 3.89
-			},
-			{
-				"name": "Fountain Drink",
-				"quantity": 4,
-				"price": 2.79
+				"price": 5.09
 			}
 		]
 	}

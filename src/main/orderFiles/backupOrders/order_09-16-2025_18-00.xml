@@ -1,6 +1,6 @@
 <Orders>
-    <Order id="1758042000000">
-        <OrderType>delivery</OrderType>
+    <Order id="1758063600000">
+        <OrderType>togo</OrderType>
         <Item type="Turtle Sundae">
             <Price>7.29</Price>
             <Quantity>1</Quantity>

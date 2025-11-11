@@ -1,7 +1,7 @@
 {
 	"order": {
-		"type": "delivery",
-		"order_date": 1758033000000,
+		"type": "dine-in",
+		"order_date": 1758045600000,
 		"items": [
 			{
 				"name": "Root Beer Float",
