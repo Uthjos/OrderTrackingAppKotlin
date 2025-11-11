@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'SEQUENCE DIAGRAM: PHASE 2
+
+actor RestaurantSystem
+participant OrderListener
+participant OrderTrackerController
+participant Parser
+participant OrderDriver
+
+RestaurantSystem -> OrderListener : New order files detected in ImportOrders folder
+OrderListener -> OrderTrackerController : addOrderFile(file)
+
+alt Type JSON
+OrderTrackerController -> Parser : parseJSONOrder(file)
+
+else type XML
+OrderTrackerController -> Parser : parseXMLOrder(file
+end
+
+Parser --> OrderTrackerController : Return Order
+OrderTrackerController -> OrderDriver : addOrder(order)
+OrderDriver --> OrderTrackerController : Return
+OrderTrackerController -> OrderTrackerController : Update GUI
+
+@enduml

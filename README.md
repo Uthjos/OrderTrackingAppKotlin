@@ -47,12 +47,12 @@ Run within an IDE that supports Gradle (e.g., IntelliJ IDEA) by running the "Lau
 https://docs.google.com/document/d/1ZZ_qqwHPmVuCYHXN2_n7UoWFspIYIPRkLV6WVAtXNIA/edit?tab=t.0
 
 ## System Loads Orders on Import Directory Update Sequence Diagram
-![Project 2 Sequence Diagram](src/main/java/Design/SystemLoadsOrdersOnStartup.png)
+![Project 2 Sequence Diagram](src/main/java/design/SystemLoadsOrdersOnStartup.png)
 ## System Saves Orders on Exit Sequence Diagram
-![Project 2 Sequence Diagram](src/main/java/Design/StaffSavesOrdersOnExit.png)
+![Project 2 Sequence Diagram](src/main/java/design/StaffSavesOrdersOnExit.png)
 
 ## UML Class Diagram
-![Project 2 UML](src/main/java/Design/ClassUMLDiagram.png)
+![Project 2 UML](src/main/java/design/ClassUMLDiagram.png)
 
 
 ## Dependencies
