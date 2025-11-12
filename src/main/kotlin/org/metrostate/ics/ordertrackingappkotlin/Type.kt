@@ -4,17 +4,17 @@ package org.metrostate.ics.ordertrackingappkotlin
  * Order types.
  */
 enum class Type {
-    togo,
-    pickup,
-    delivery,
-    dineIn;
+    TOGO,
+    PICKUP,
+    DELIVERY,
+    DINE_IN;
 
     override fun toString(): String {
         return when (this) {
-            togo -> "To-go"
-            pickup -> "Pickup"
-            delivery -> "Delivery"
-            dineIn -> "Dine-In"
+            TOGO -> "To-go"
+            PICKUP -> "Pickup"
+            DELIVERY -> "Delivery"
+            DINE_IN -> "Dine-In"
         }
     }
 }

@@ -4,17 +4,17 @@ package org.metrostate.ics.ordertrackingappkotlin
  * Order statuses.
  */
 enum class Status {
-    cancelled,
-    completed,
-    inProgress,
-    waiting;
+    CANCELLED,
+    COMPLETED,
+    IN_PROGRESS,
+    WAITING;
 
     override fun toString(): String {
         return when (this) {
-            cancelled -> "Cancelled"
-            completed -> "Completed"
-            inProgress -> "In progress"
-            waiting -> "Waiting"
+            CANCELLED -> "Cancelled"
+            COMPLETED -> "Completed"
+            IN_PROGRESS -> "In progress"
+            WAITING -> "Waiting"
         }
     }
 }
