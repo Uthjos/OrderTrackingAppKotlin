@@ -24,7 +24,7 @@ class Order {
     var type: Type? = null
         private set
 
-    var status: Status?
+    var status: Status = Status.WAITING
 
     var foodList: ArrayList<FoodItem> = ArrayList<FoodItem>()
         private set
@@ -73,7 +73,7 @@ class Order {
         date: Long,
         totalPrice: Double,
         type: Type?,
-        status: Status?,
+        status: Status,
         foodList: MutableList<FoodItem>
     ) {
         this.orderID = orderId
@@ -148,9 +148,7 @@ class Order {
      * @return The order's status
      */
     fun displayStatus(): String {
-        if (status == null) {
-            return "No Status"
-        }
+
         return status.toString()
     }
 
