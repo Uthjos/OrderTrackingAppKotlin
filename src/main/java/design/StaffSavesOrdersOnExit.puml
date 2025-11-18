@@ -1,0 +1,19 @@
+@startuml
+actor RestaurantSystem
+participant OrderListener
+participant OrderTrackerApp
+participant OrderTrackerController
+participant OrderDriver
+
+RestaurantSystem -> OrderTrackerController : exitApplication()
+RestaurantSystem --> OrderTrackerApp: Close Request
+OrderTrackerApp -x OrderTrackerApp : saveCurrentState()
+OrderTrackerController --x OrderListener : stop()
+OrderTrackerController -> OrderTrackerController : saveStateOnExit()
+OrderTrackerController -> OrderDriver : saveAllOrdersToJSON()
+OrderDriver -> OrderDriver : orderExportJSON()
+OrderDriver ->OrderTrackerController : Return
+OrderTrackerController -x OrderTrackerController : System.Exit()
+
+
+@enduml

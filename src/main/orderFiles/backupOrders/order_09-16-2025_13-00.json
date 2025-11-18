@@ -1,0 +1,23 @@
+{
+  "order": {
+    "type": "dine-in",
+    "tip": {
+      "kitchenTip": {
+        "type": "dollars",
+        "amount": 1.69
+      },
+      "serverTip": {
+        "type": "dollars",
+        "amount": 2.54
+      }
+    },
+    "order_date": 1758045600000,
+    "items": [
+      {
+        "name": "Root Beer Float",
+        "quantity": 4,
+        "price": 5.29
+      }
+    ]
+  }
+}

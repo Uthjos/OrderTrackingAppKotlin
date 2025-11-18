@@ -1,0 +1,4 @@
+This directory is just a backup for all of our test order files. /testOrders/ is gitignored to prevent cluttering the repo whenever files are moved from import back to testOrders.
+Backup in case your files get lost.
+
+The program does not see or use any files in this folder.
