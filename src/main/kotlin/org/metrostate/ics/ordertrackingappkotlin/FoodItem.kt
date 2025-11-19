@@ -5,9 +5,9 @@ package org.metrostate.ics.ordertrackingappkotlin
  * Contains the item's name, quantity, and price.
  */
 class FoodItem (
-    var name: String = "Null",
-    var quantity: Int = 0,
-    var price: Double = 0.0
+    val name: String = "Null",
+    val quantity: Int = 0,
+    val price: Double = 0.0
     ){
 
     /**

@@ -21,7 +21,7 @@ class Order {
     var totalPrice: Double = 0.0
         private set
 
-    var type: Type? = null
+    var type: Type = Type.DEFAULT
         private set
 
     var status: Status = Status.WAITING
@@ -48,7 +48,7 @@ class Order {
      * @param date      The timestamp of the order
      * @param foodList  The initial list of food items
      */
-    constructor(orderId: Int, type: Type?, date: Long, foodList: MutableList<FoodItem>) {
+    constructor(orderId: Int, type: Type, date: Long, foodList: MutableList<FoodItem>) {
         this.orderID = orderId
         this.type = type
         this.date = date
@@ -72,7 +72,7 @@ class Order {
         orderId: Int,
         date: Long,
         totalPrice: Double,
-        type: Type?,
+        type: Type,
         status: Status,
         foodList: MutableList<FoodItem>
     ) {
