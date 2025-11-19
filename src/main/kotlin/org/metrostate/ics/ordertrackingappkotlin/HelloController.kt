@@ -89,8 +89,8 @@ class HelloController {
     }
 
     @FXML
-    @Suppress("unused", "UNUSED_PARAMETER")
-    private fun openOrderDetails(_event: MouseEvent) {
+    @Suppress("unused")
+    private fun openOrderDetails() {
         openOrderDetails(exampleOrder)
     }
 }
