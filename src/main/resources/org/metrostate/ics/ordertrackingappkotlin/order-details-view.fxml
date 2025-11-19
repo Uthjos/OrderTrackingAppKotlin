@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_LEFT" prefHeight="400.0" prefWidth="500.0" spacing="12.0" style="-fx-padding: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.metrostate.ics.ordertrackingappkotlin.OrderDetailsController">
+    <Label text="Order Details">
+        <font>
+            <Font size="20" />
+        </font>
+    </Label>
+
+    <GridPane hgap="10" vgap="8">
+        <TextArea fx:id="orderInfo" prefHeight="220.0" prefRowCount="8" prefWidth="478.0" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" GridPane.rowSpan="5" />
+    </GridPane>
+
+    <HBox alignment="CENTER_RIGHT" spacing="8">
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#close" text="Close" />
+    </HBox>
+</VBox>
