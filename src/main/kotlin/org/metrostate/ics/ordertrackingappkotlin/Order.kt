@@ -137,58 +137,8 @@ class Order {
 
         return "Order #" + this.orderID + "\n" +
                 formattedDate + "\n\n" +
-                "Status: " + displayStatus() + '\n' +
-                "Type: " + displayType() + '\n' +
+                "Status: " + this.status.toString() + '\n' +
+                "Type: " + this.type.toString() + '\n' +
                 "Items: " + s + String.format("\n\nTotal Price: $%.2f", totalPrice)
-    }
-
-    /**
-     * Returns the order's status as a readable string.
-     *
-     * @return The order's status
-     */
-    fun displayStatus(): String {
-
-        return status.toString()
-    }
-
-    /**
-     * Returns the order's type as a readable string.
-     *
-     * @return The order's type
-     */
-    fun displayType(): String {
-        if (type == null) {
-            return "No Type"
-        }
-        return type.toString()
-    }
-
-    companion object {
-        fun parseOrderStatus(stringStatus: String?): Status? {
-            if (stringStatus == null) {
-                return null
-            }
-
-            try {
-                return Status.valueOf(stringStatus)
-            } catch (e: IllegalArgumentException) {
-                System.err.println("Invalid status string: $stringStatus")
-                return null
-            }
-        }
-
-        fun parseOrderType(stringType: String?): Type? {
-            if (stringType == null) {
-                return null
-            }
-
-            try {
-                return Type.valueOf(stringType)
-            } catch (e: IllegalArgumentException) {
-                System.err.println("Invalid type string: $stringType")
-                return null
-            }
-        }
     }
 }
