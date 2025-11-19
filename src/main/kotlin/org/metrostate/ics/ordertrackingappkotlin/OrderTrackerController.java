@@ -160,7 +160,7 @@ public class OrderTrackerController {
                     // orders on separate thread - update UI on JavaFX thread
                     Platform.runLater(() -> {
                         // save new order to savedOrders
-                        OrderDriver.orderExportJSON(order, Directory.getDirectory(Directory.savedOrders));
+                        OrderDriver.Companion.orderExportJSON(order, Directory.Companion.getDirectory(Directory.savedOrders));
                         applyFilters();
                         updateClearAllButtonVisibility(); //only visible when there are orders
                     });
@@ -171,7 +171,7 @@ public class OrderTrackerController {
                     //another thread - update UI on JavaFX thread
                     Platform.runLater(() -> {
                         // save updated order to savedOrders
-                        OrderDriver.orderExportJSON(order, Directory.getDirectory(Directory.savedOrders));
+                        OrderDriver.Companion.orderExportJSON(order, Directory.Companion.getDirectory(Directory.savedOrders));
                         applyFilters();
                         VBox box = findOrderBoxForOrder(order);
                         if (box != null) refreshOrderBox(box, order);
@@ -272,7 +272,7 @@ public class OrderTrackerController {
     private void saveStateOnExit() {
         if (orderDriver == null) return;
 
-        String savedOrdersPath = Directory.getDirectory(Directory.savedOrders);
+        String savedOrdersPath = Directory.Companion.getDirectory(Directory.savedOrders);
 
         File savedOrdersDir = new File(savedOrdersPath);
         if (!savedOrdersDir.exists()) {
@@ -282,8 +282,8 @@ public class OrderTrackerController {
         orderDriver.saveAllOrdersToJSON(savedOrdersPath);
 
         // move all orders from import to test by copying and deleting originals (3 delete retries)
-        String importPath = Directory.getDirectory(Directory.importOrders);
-        String testPath = Directory.getDirectory(Directory.testOrders);
+        String importPath = Directory.Companion.getDirectory(Directory.importOrders);
+        String testPath = Directory.Companion.getDirectory(Directory.testOrders);
 
         File importDir = new File(importPath);
         File testDir = new File(testPath);
@@ -443,7 +443,7 @@ public class OrderTrackerController {
             if (order != null) showOrderDetails(order);
             // hide Cancel button when order is completed or cancelled
             if (cancelButton != null) {
-                cancelButton.setDisable(order == null || order.getStatus() == Status.completed || order.getStatus() == Status.cancelled);
+                cancelButton.setDisable(order == null || order.getStatus() == Status.COMPLETED || order.getStatus() == Status.CANCELLED);
             }
             updateButtonsVisibility(order);
         });
@@ -459,28 +459,28 @@ public class OrderTrackerController {
     private void updateButtonsVisibility(Order order) {
         if (cancelButton != null) {
             // hide the cancel button when order is completed or cancelled
-            boolean showCancel = order != null && order.getStatus() != Status.completed && order.getStatus() != Status.cancelled;
+            boolean showCancel = order != null && order.getStatus() != Status.COMPLETED && order.getStatus() != Status.CANCELLED;
             cancelButton.setVisible(showCancel);
             cancelButton.setManaged(showCancel);
-            cancelButton.setDisable(order == null || order.getStatus() == Status.completed || order.getStatus() == Status.cancelled);
+            cancelButton.setDisable(order == null || order.getStatus() == Status.COMPLETED || order.getStatus() == Status.CANCELLED);
         }
         if (undoButton != null) {
             // show the Un-cancel button only when the selected order is cancelled
-            boolean showUncancel = order != null && order.getStatus() == Status.cancelled;
+            boolean showUncancel = order != null && order.getStatus() == Status.CANCELLED;
             undoButton.setVisible(showUncancel);
             undoButton.setManaged(showUncancel);
             undoButton.setDisable(!showUncancel);
         }
         if (startButton != null) {
             // only when waiting
-            boolean showStart = order != null && order.getStatus() == Status.waiting;
+            boolean showStart = order != null && order.getStatus() == Status.WAITING;
             startButton.setVisible(showStart);
             startButton.setManaged(showStart);
             startButton.setDisable(!showStart);
         }
         if (completeButton != null) {
             // only when inProgress
-            boolean showComplete = order != null && order.getStatus() == Status.inProgress;
+            boolean showComplete = order != null && order.getStatus() == Status.IN_PROGRESS;
             completeButton.setVisible(showComplete);
             completeButton.setManaged(showComplete);
             completeButton.setDisable(!showComplete);
@@ -537,10 +537,10 @@ public class OrderTrackerController {
      */
     private String statusColor(Status status) {
         if (status == null) return "#666666";
-        if (status == Status.completed) { return "#2e7d32"; } // green
-        if (status == Status.waiting) { return "#fb8c00"; } // orange
-        if (status == Status.inProgress) { return "#1565c0"; } // blue
-        if (status == Status.cancelled) { return "#c62828"; } // red
+        if (status == Status.COMPLETED) { return "#2e7d32"; } // green
+        if (status == Status.WAITING) { return "#fb8c00"; } // orange
+        if (status == Status.IN_PROGRESS) { return "#1565c0"; } // blue
+        if (status == Status.CANCELLED) { return "#c62828"; } // red
         return "#666666";
     }
 
@@ -826,7 +826,7 @@ public class OrderTrackerController {
                         selectedOrder = order;
                         showOrderDetails(order);
                         if (cancelButton != null) {
-                            cancelButton.setDisable(order.getStatus() == Status.completed || order.getStatus() == Status.cancelled);
+                            cancelButton.setDisable(order.getStatus() == Status.COMPLETED || order.getStatus() == Status.CANCELLED);
                         }
                         updateButtonsVisibility(order);
                     });
