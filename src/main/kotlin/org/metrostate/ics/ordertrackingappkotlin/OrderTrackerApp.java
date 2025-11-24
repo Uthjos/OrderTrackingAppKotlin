@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.metrostate.ics.ordertrackingappkotlin.parser.Parser;
+import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,7 +89,9 @@ public class OrderTrackerApp extends Application {
         // load each saved order
         for (File file : savedFiles) {
             try {
-                Order order = Parser.parseSavedJSONOrder(file);
+                ParserFactory parserFactory = new ParserFactory();
+                Parser myParser = parserFactory.getParser(file.toString());
+                Order order = myParser.parse(file);
                 driver.addOrder(order);
                 // track maximum order ID from previous state
                 if (order.getOrderID() > maxOrderId) {

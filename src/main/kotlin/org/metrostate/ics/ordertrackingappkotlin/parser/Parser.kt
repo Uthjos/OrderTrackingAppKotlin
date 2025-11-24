@@ -193,13 +193,14 @@ fun main() {
 
     //test for json file type
     var file = File("src/main/orderFiles/backupOrders/order_09-16-2025_10-00.json")
-    var myParser = getParser(file.toString())
+    val parserFactory = ParserFactory()
+    var myParser = parserFactory.getParser(file.toString())
     var myOrder = myParser.parse(file)
     println(myOrder)
 
     //test for xml file type
     file = File("src/main/orderFiles/backupOrders/order_09-16-2025_16-00.xml")
-    myParser = getParser(file.toString())
+    myParser = parserFactory.getParser(file.toString())
     myOrder = myParser.parse(file)
     println(myOrder)
 
