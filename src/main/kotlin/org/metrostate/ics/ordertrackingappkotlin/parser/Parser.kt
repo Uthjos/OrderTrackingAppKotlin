@@ -1,8 +1,12 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.parser
 
 import org.json.JSONObject
 import org.json.JSONTokener
-import org.metrostate.ics.ordertrackingappkotlin.Parser.Companion.nextOrderNumber
+import org.metrostate.ics.ordertrackingappkotlin.FoodItem
+import org.metrostate.ics.ordertrackingappkotlin.Order
+import org.metrostate.ics.ordertrackingappkotlin.Status
+import org.metrostate.ics.ordertrackingappkotlin.Type
+import org.metrostate.ics.ordertrackingappkotlin.parser.Parser.Companion.nextOrderNumber
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.xml.sax.SAXException
@@ -39,7 +43,7 @@ interface Parser {
 }
 
 class JSONParser : Parser {
-    override fun parse(file: File) :Order {
+    override fun parse(file: File) : Order {
         val orderDate: Long
         val orderType: Type?
         val foodItemList: MutableList<FoodItem> = ArrayList<FoodItem>()
@@ -74,7 +78,7 @@ class JSONParser : Parser {
 }
 
 class XMLParser : Parser {
-    override fun parse(file: File) :Order {
+    override fun parse(file: File) : Order {
         var orderDate: Long = 0
         var orderType: Type? = null
         val foodItemList: MutableList<FoodItem> = ArrayList<FoodItem>()
