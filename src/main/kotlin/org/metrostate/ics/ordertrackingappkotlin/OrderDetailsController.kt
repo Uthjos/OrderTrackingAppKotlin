@@ -1,0 +1,28 @@
+package org.metrostate.ics.ordertrackingappkotlin
+
+import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
+import javafx.scene.control.TextArea
+
+class OrderDetailsController {
+
+    @FXML
+    var orderInfo = TextArea()
+
+    fun setOrderDetails(order: Order) {
+        orderInfo.text = order.toString()
+    }
+
+    @FXML
+    private fun close() { //closing the order details window returns to main view
+        // change the scene root back to main view
+        try {
+            val loader = FXMLLoader(javaClass.getResource("/org/metrostate/ics/ordertrackingappkotlin/main-view.fxml"))
+            val root = loader.load<javafx.scene.Parent>()
+            val scene = orderInfo.scene
+            scene.root = root
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}
