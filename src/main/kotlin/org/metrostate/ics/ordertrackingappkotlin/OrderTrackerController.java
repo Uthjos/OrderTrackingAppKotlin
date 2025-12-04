@@ -211,7 +211,7 @@ public class OrderTrackerController {
             orderListener.stop();
         }
 
-        saveStateOnExit();
+        SaveState.Companion.saveStateOnExit(orderDriver);
 
         if (orderDriver != null && driverListener != null) {
             orderDriver.removeListener(driverListener);
