@@ -39,6 +39,9 @@ class HelloController {
             )
         )
 
+        // Tip testing in Order class
+        exampleOrder.setTips(kitchen = 1.00, server = 2.00)
+
         orders.add(exampleOrder)
 
         populateOrderTiles()

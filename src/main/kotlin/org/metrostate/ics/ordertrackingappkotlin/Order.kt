@@ -131,6 +131,12 @@ class Order {
         return totalPrice + kitchenTip + serverTip
     }
 
+    // Testing tips in example order from HelloController
+    fun setTips(kitchen: Double, server: Double) {
+        kitchenTip = kitchen
+        serverTip = server
+    }
+
     /**
      * Returns a formatted string representing the order, including all food items.
      *
