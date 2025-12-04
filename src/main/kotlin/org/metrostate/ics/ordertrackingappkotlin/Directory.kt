@@ -52,8 +52,8 @@ enum class Directory(
          * will Delete all files in the directory in argument
          */
         fun deleteFilesInDirectory(directory: Directory) {
-            var fileDir: File = File(Directory.getDirectory(directory))
-            var files: Array<File>? = fileDir.listFiles()
+            val fileDir: File = File(Directory.getDirectory(directory))
+            val files: Array<File>? = fileDir.listFiles()
 
             if (files != null) {
                 for (f in files) {
