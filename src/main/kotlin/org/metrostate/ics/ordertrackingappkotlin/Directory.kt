@@ -6,19 +6,16 @@ import java.nio.file.Paths
 /**
  * The Directory Enum holds all data directories
  */
-enum class Directory(path: String) {
-    savedOrders("orderFiles/savedOrders"),
-    testOrders("orderFiles/testOrders"),
-    importOrders("orderFiles/importOrders");
-
+enum class Directory(
     /**
      * holds the path after src/main/
      */
-    val path: String?
-
-    init {
-        this.path = path
-    }
+    val path: String
+) {
+    savedOrders("orderFiles/savedOrders"),
+    testOrders("orderFiles/testOrders"),
+    importOrders("orderFiles/importOrders"),
+    historyOrders("orderFiles/historyOrders");
 
     companion object {
         /**
