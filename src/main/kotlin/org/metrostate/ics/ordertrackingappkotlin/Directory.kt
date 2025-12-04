@@ -51,20 +51,12 @@ enum class Directory(
         /**
          * will Delete all files in the directory in argument
          */
-        fun deleteFilesInDirectory(directory: String) {
-            var fileDir: File = File(directory)
+        fun deleteFilesInDirectory(directory: Directory) {
+            var fileDir: File = File(Directory.getDirectory(directory))
             var files: Array<File>? = fileDir.listFiles()
 
             if (files != null) {
                 for (f in files) {
-                    val dest: File = File(fileDir, f.getName())
-                    try {
-                        // copy (overwrite if exists)
-                        Files.copy(f.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING)
-                    } catch (e: IOException) {
-                        System.err.println("Failed to copy " + f.getAbsolutePath() + " to " + dest.getAbsolutePath() + ": " + e.message)
-                        continue
-                    }
 
                     // try deleting original up to 4 times with longer delay each time
                     var deleted = false
@@ -90,6 +82,27 @@ enum class Directory(
             }
         }
 
+        /**
+         * will Copy all Files in a Directory to another
+         */
+        fun backupFilesInDirectory(copyFromDir: Directory, destDir: Directory) {
+            val sourceDir = File(Directory.getDirectory(copyFromDir))
+            val targetDir = File(Directory.getDirectory(destDir))
+
+            val files = sourceDir.listFiles() ?: return
+
+
+                for (f in files) {
+                    val dest: File = File(targetDir, f.getName())
+                    try {
+                        // copy (overwrite if exists)
+                        Files.copy(f.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                    } catch (e: IOException) {
+                        System.err.println("Failed to copy " + f.getAbsolutePath() + " to " + dest.getAbsolutePath() + ": " + e.message)
+                        continue
+                    }
+                }
+            }
 
     }
 
