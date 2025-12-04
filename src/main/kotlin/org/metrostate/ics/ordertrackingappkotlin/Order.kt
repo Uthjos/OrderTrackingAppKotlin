@@ -17,6 +17,11 @@ class Order {
     var date: Long = 0
         private set
 
+    var kitchenTip: Double = 0.0
+        private set
+
+    var serverTip: Double = 0.0
+        private set
 
     var totalPrice: Double = 0.0
         private set
@@ -122,6 +127,10 @@ class Order {
         return priceUpdate
     }
 
+    fun grandTotal(): Double {
+        return totalPrice + kitchenTip + serverTip
+    }
+
     /**
      * Returns a formatted string representing the order, including all food items.
      *
@@ -135,10 +144,14 @@ class Order {
         val zdt = Instant.ofEpochMilli(this.date).atZone(ZoneId.of("America/Chicago"))
         val formattedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm z").format(zdt)
 
-        return "Order #" + this.orderID + "\n" +
-                formattedDate + "\n\n" +
-                "Status: " + this.status.toString() + '\n' +
-                "Type: " + this.type.toString() + '\n' +
-                "Items: " + s + String.format("\n\nTotal Price: $%.2f", totalPrice)
+        return "Order #$orderID\n" +
+                "$formattedDate\n\n" +
+                "Status: $status\n" +
+                "Type: $type\n" +
+                "Items:$s" +
+                String.format("\n\nTotal Price: $%.2f", totalPrice) +
+                String.format("\nKitchen Tip: $%.2f", kitchenTip) +
+                String.format("\nServer Tip: $%.2f", serverTip) +
+                String.format("\n\nGrand Total: $%.2f", grandTotal())
     }
 }
