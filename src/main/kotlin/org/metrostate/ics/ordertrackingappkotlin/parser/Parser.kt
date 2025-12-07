@@ -179,6 +179,9 @@ class SavedJSONParser : Parser {
         val orderStatus: Status?
         var originalCompany: String? = null
         val foodItemList: MutableList<FoodItem> = ArrayList<FoodItem>()
+        var kitchenTip = 0.0
+        var serverTip = 0.0
+        var driverTip = 0.0
 
         FileReader(file).use { reader ->
             val jsonObject = JSONObject(JSONTokener(reader))
@@ -196,6 +199,14 @@ class SavedJSONParser : Parser {
                 originalCompany = jsonObject.getString("company")
             }
 
+            // Read tips if present
+            if (jsonObject.has("tip")) {
+                val tipObj = jsonObject.getJSONObject("tip")
+                if (tipObj.has("kitchenTip")) kitchenTip = tipObj.getJSONObject("kitchenTip").getDouble("amount")
+                if (tipObj.has("serverTip")) serverTip = tipObj.getJSONObject("serverTip").getDouble("amount")
+                if (tipObj.has("driverTip")) driverTip = tipObj.getJSONObject("driverTip").getDouble("amount")
+            }
+
             val itemArray = jsonObject.getJSONArray("foodList")
             for (o in itemArray) {
                 val item = o as JSONObject
@@ -206,6 +217,8 @@ class SavedJSONParser : Parser {
             }
         }
         val order = Order(orderId, date, totalPrice, orderType!!, orderStatus!!, foodItemList)
+
+        order.setTips(kitchenTip, serverTip, driverTip)
 
         if (originalCompany != null && !originalCompany.isEmpty()) {
             if (originalCompany.startsWith("Restored - ")) {
