@@ -47,6 +47,8 @@ class JSONParser : Parser {
         val orderDate: Long
         val orderType: Type?
         val foodItemList: MutableList<FoodItem> = ArrayList<FoodItem>()
+        var kitchenTip = 0.0
+        var serverTip = 0.0
 
         FileReader(file).use { fr ->
             val jsonObject = JSONObject(JSONTokener(fr))
@@ -58,6 +60,10 @@ class JSONParser : Parser {
 
             val typeStr = orderJson.getString("type")
             orderType = Type.valueOf(typeStr.uppercase(Locale.getDefault()))
+
+            // Read tips if present
+            if (orderJson.has("kitchenTip")) kitchenTip = orderJson.getDouble("kitchenTip")
+            if (orderJson.has("serverTip")) serverTip = orderJson.getDouble("serverTip")
 
             val itemArray = orderJson.getJSONArray("items")
             for (o in itemArray) {
@@ -71,6 +77,9 @@ class JSONParser : Parser {
         val order = Order(
             nextOrderNumber, orderType!!, orderDate, foodItemList
         )
+
+        order.setTips(kitchenTip, serverTip)
+
         order.company = "FoodHub (JSON)"
         return order
 
@@ -82,6 +91,8 @@ class XMLParser : Parser {
         var orderDate: Long = 0
         var orderType: Type? = null
         val foodItemList: MutableList<FoodItem> = ArrayList<FoodItem>()
+        var kitchenTip = 0.0
+        var serverTip = 0.0
 
         try {
             val dbFactory = DocumentBuilderFactory.newInstance()
@@ -98,6 +109,16 @@ class XMLParser : Parser {
                     orderDate = eElement.getAttribute("id").toLong()
                     val typeStr = eElement.getElementsByTagName("OrderType").item(0).textContent
                     orderType = Type.valueOf(typeStr.uppercase(Locale.getDefault()))
+
+                    // Reads tips if present
+                    val tipNodes = eElement.getElementsByTagName("Tip")
+                    if (tipNodes.length > 0) {
+                        val tipElement = tipNodes.item(0) as Element
+                        val kitchenNode = tipElement.getElementsByTagName("KitchenTip").item(0)
+                        val serverNode = tipElement.getElementsByTagName("ServerTip").item(0)
+                        if (kitchenNode != null) kitchenTip = kitchenNode.textContent.toDouble()
+                        if (serverNode != null) serverTip = serverNode.textContent.toDouble()
+                    }
                 }
             }
 
@@ -128,6 +149,9 @@ class XMLParser : Parser {
         val order = Order(
             nextOrderNumber, orderType!!, orderDate, foodItemList
         )
+
+        order.setTips(kitchenTip, serverTip)
+
         order.company = "GrubStop (XML)"
         return order
     }
