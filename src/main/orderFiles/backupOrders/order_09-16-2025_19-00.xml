@@ -1,7 +1,9 @@
 <Orders>
     <Order id="1758067200000">
         <OrderType>delivery</OrderType>
-        <Tip type="dollars">8.98</Tip>
+        <Tip>
+            <DriverTip type="dollars">1.99</DriverTip>
+        </Tip>
         <Item type="Crispy Chicken Sandwich">
             <Price>6.79</Price>
             <Quantity>3</Quantity>

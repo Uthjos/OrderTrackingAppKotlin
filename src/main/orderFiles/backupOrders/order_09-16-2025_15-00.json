@@ -3,8 +3,10 @@
     "type": "delivery",
     "order_date": 1758052800000,
     "tip": {
-      "type": "dollars",
-      "amount": 5.00
+      "driverTip": {
+        "type": "dollars",
+        "amount": 4.69
+      }
     },
     "items": [
       {

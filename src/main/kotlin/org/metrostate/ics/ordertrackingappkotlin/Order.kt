@@ -23,6 +23,9 @@ class Order {
     var serverTip: Double = 0.0
         private set
 
+    var driverTip: Double = 0.0
+        private set
+
     var totalPrice: Double = 0.0
         private set
 
@@ -128,13 +131,14 @@ class Order {
     }
 
     fun grandTotal(): Double {
-        return totalPrice + kitchenTip + serverTip
+        return totalPrice + kitchenTip + serverTip + driverTip
     }
 
     // Testing tips in example order from HelloController
-    fun setTips(kitchen: Double, server: Double) {
+    fun setTips(kitchen: Double, server: Double, driver: Double) {
         kitchenTip = kitchen
         serverTip = server
+        driverTip = driver
     }
 
     /**
@@ -158,6 +162,7 @@ class Order {
                 String.format("\n\nTotal Price: $%.2f", totalPrice) +
                 String.format("\nKitchen Tip: $%.2f", kitchenTip) +
                 String.format("\nServer Tip: $%.2f", serverTip) +
+                String.format("\nDriver Tip: $%.2f", driverTip) +
                 String.format("\n\nGrand Total: $%.2f", grandTotal())
     }
 }
