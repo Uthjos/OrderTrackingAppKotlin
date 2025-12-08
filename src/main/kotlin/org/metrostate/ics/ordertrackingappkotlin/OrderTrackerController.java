@@ -367,12 +367,12 @@ public class OrderTrackerController {
             orderTitle.setText("Order #" + order.getOrderID() + ":");
 
             // status text and color
-            String statusText = order.displayStatus();
+            String statusText = order.getStatus().toString();
             statusLabel.setText(statusText);
             statusLabel.setStyle("-fx-text-fill: " + statusColor(order.getStatus()) + ";");
 
             // type formatting
-            String type = order.displayType();
+            String type = order.getType().toString();
             typeLabel.setText(type);
             typeLabel.setStyle("-fx-text-fill: " + typeColor(type) + "; -fx-font-weight: bold;");
 
