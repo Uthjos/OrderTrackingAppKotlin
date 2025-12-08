@@ -14,7 +14,6 @@ import java.io.IOException
 class OrderDriver {
 
     val orders: MutableList<Order> = ArrayList()
-    private var lastCancelledOrder: Order? = null
 
     /**
      * Listener to watch for changes to an order's status -- in order to update the GUI when buttons are clicked.
@@ -104,31 +103,32 @@ class OrderDriver {
         get() = orders.size
 
     /**
-     * Starts an order if its status is "INCOMING".
-     * Changes the status of the order to "IN PROGRESS".
+     * Updates the status of an order and notifies listeners.
+     * only allows :
+     * - WAITING -> IN_PROGRESS or CANCELLED
+     * - IN_PROGRESS -> COMPLETED or CANCELLED
+     * - CANCELLED -> WAITING (uncancel)
      *
-     * @param order The order to start
+     * @param order The order to update
+     * @param newStatus The new status to set
+     * @return True if the status was updated, false if the transition is invalid
      */
-    fun startOrder(order: Order) {
-        // only start if it's waiting, otherwise do nothing
-        if (order.status == Status.WAITING) {
-            order.status = Status.IN_PROGRESS
-            notifyOrderChanged(order)
+    fun updateStatus(order: Order, newStatus: Status): Boolean {
+        val currentStatus = order.status
+        val canUpdate = when (newStatus) {
+            Status.IN_PROGRESS -> currentStatus == Status.WAITING
+            Status.COMPLETED -> currentStatus == Status.IN_PROGRESS
+            Status.CANCELLED -> currentStatus != Status.COMPLETED
+            Status.WAITING -> currentStatus == Status.CANCELLED
         }
-    }
 
-    /**
-     * Completes an order if its status is "IN PROGRESS".
-     * Changes the status to "COMPLETED", removes it from incompleteOrders, and adds it to completeOrders.
-     *
-     * @param order The order to complete
-     */
-    fun completeOrder(order: Order) {
-        // only complete if it's in progress, otherwise do nothing
-        if (order.status == Status.IN_PROGRESS) {
-            order.status = Status.COMPLETED
-            notifyOrderChanged(order)
+        if (!canUpdate) {
+            return false
         }
+
+        order.status = newStatus
+        notifyOrderChanged(order)
+        return true
     }
 
     /**
@@ -147,39 +147,8 @@ class OrderDriver {
      */
     fun clearAllOrders() {
         orders.clear()
-        lastCancelledOrder = null
     }
 
-    /**
-     * Cancels an order.
-     *
-     * @param order     The order to cancel
-     * @return          True if the order was successfully cancelled, false otherwise
-     */
-    fun cancelOrderGUI(order: Order?): Boolean {
-        if (order == null || order.status == Status.COMPLETED) {
-            return false
-        }
-        order.status = Status.CANCELLED
-        lastCancelledOrder = order
-        notifyOrderChanged(order)
-        return true
-    }
-
-    /**
-     * Un-cancel a specific order (set status back to waiting) if it is currently cancelled.
-     * Returns true if the order was un-cancelled, false otherwise.
-     */
-    fun uncancelOrder(order: Order?): Boolean {
-        if (order == null) return false
-        if (order.status != Status.CANCELLED) return false
-        order.status = Status.WAITING
-        if (lastCancelledOrder == order) {
-            lastCancelledOrder = null
-        }
-        notifyOrderChanged(order)
-        return true
-    }
 
     companion object {
         /**
