@@ -85,10 +85,31 @@ class OrderDetailsController {
         // pricing
         val pricingBox = VBox(8.0).apply { style = "-fx-padding: 10 0 0 0;" }
         addPricingRow(pricingBox, "Subtotal:      ", order.totalPrice, false)
-        addPricingRow(pricingBox, "Kitchen Tip:  ", order.getKitchenTip(), false)
+        // tips
+        val kitchenTip = order.getKitchenTip()
+        var kitchenPct = ""
+            if (kitchenTip > 0.0) {
+                kitchenPct = " (${String.format("%.0f", (kitchenTip / order.totalPrice) * 100.0)}%)"
+            }
+        addPricingRow(pricingBox, "Kitchen Tip: $kitchenPct  ", kitchenTip, false)
+
         when (order) {
-            is DeliveryOrder -> addPricingRow(pricingBox, "Driver Tip:    ", order.getDriverTip(), false)
-            is DineInOrder -> addPricingRow(pricingBox, "Server Tip:    ", order.getServerTip(), false)
+            is DeliveryOrder -> {
+                val driverTip = order.getDriverTip()
+                var driverPct = ""
+                if (driverTip > 0.0) {
+                    driverPct = " (${String.format("%.0f", (driverTip / order.totalPrice) * 100.0)}%)"
+                }
+                addPricingRow(pricingBox, "Driver Tip:    $driverPct  ", driverTip, false)
+            }
+            is DineInOrder -> {
+                val serverTip = order.getServerTip()
+                var serverPct = ""
+                if (serverTip > 0.0) {
+                    serverPct = " (${String.format("%.0f", (serverTip / order.totalPrice) * 100.0)}%)"
+                }
+                addPricingRow(pricingBox, "Server Tip:   $serverPct  ", serverTip, false)
+            }
         }
         pricingBox.children.add(Separator().apply { VBox.setMargin(this, Insets(5.0, 0.0, 5.0, 0.0)) })
         addPricingRow(pricingBox, "Grand Total:  ", order.calculateGrandTotal(), true)
@@ -180,9 +201,6 @@ class OrderDetailsController {
             if (mainViewRoot != null) {
                 // Refresh the main view to show any status changes
                 mainViewController?.populateOrderTiles()
-
-                //saveStateonExit here
-
                 val scene = orderDetailsContainer.scene
                 scene.root = mainViewRoot
             } else {
