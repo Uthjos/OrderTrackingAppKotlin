@@ -55,7 +55,7 @@ enum class Directory(
 
             if (files != null) {
                 for (f in files) {
-                    if (!f.name.endsWith(".txt", ignoreCase = true)) {
+                    if (!f.endsWith(".txt")) {
                         deleteFile(f)
                     }
                 }
