@@ -263,8 +263,11 @@ class MainViewController {
               return node.parent as VBox?
           }
           else if (node is Pane){
-              for (node in node.children) {
-                  return findOrderBoxForOrder(node, order)
+              for (innerChild in node.children) {
+                  val result = findOrderBoxForOrder(innerChild, order)
+                  if (result != null) {
+                      return result
+                  }
               }
           }
       }

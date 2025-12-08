@@ -23,5 +23,25 @@
                 <Insets top="5.0" />
             </HBox.margin>
         </Button>
+        <Button fx:id="startButton" onAction="#handleStart" text="Start" style="-fx-background-color: #1565c0; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand;">
+            <HBox.margin>
+                <Insets top="5.0" />
+            </HBox.margin>
+        </Button>
+        <Button fx:id="completeButton" onAction="#handleComplete" text="Complete" style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand;">
+            <HBox.margin>
+                <Insets top="5.0" />
+            </HBox.margin>
+        </Button>
+        <Button fx:id="cancelButton" onAction="#handleCancel" text="Cancel" style="-fx-background-color: #c62828; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand;">
+            <HBox.margin>
+                <Insets top="5.0" />
+            </HBox.margin>
+        </Button>
+        <Button fx:id="resubmitButton" onAction="#handleResubmit" text="Resubmit" style="-fx-background-color: #fb8c00; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand;">
+            <HBox.margin>
+                <Insets top="5.0" />
+            </HBox.margin>
+        </Button>
     </HBox>
 </VBox>
