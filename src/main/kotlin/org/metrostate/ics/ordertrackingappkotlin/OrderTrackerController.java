@@ -529,7 +529,7 @@ public class OrderTrackerController {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                if (orderDriver.cancelOrderGUI(selectedOrder)) {
+                if (orderDriver.updateStatus(selectedOrder, Status.CANCELLED)) {
                     // rebuild the list so UI reflects the current state
                     Platform.runLater(() -> {
                         applyFilters();
@@ -563,7 +563,7 @@ public class OrderTrackerController {
      */
     private void undoCancel() {
         if (orderDriver == null || selectedOrder == null) return;
-        boolean success = orderDriver.uncancelOrder(selectedOrder);
+        boolean success = orderDriver.updateStatus(selectedOrder, Status.WAITING);
         // refresh UI
         Platform.runLater(() -> {
             if (success) {
@@ -588,7 +588,7 @@ public class OrderTrackerController {
      */
     private void startSelectedOrder() {
         if (selectedOrder == null || orderDriver == null) return;
-        orderDriver.startOrder(selectedOrder);
+        orderDriver.updateStatus(selectedOrder, Status.IN_PROGRESS);
         showOrderDetails(selectedOrder);
         updateButtonsVisibility(selectedOrder);
 
@@ -618,7 +618,7 @@ public class OrderTrackerController {
      */
     private void completeSelectedOrder() {
         if (selectedOrder == null || orderDriver == null) return;
-        orderDriver.completeOrder(selectedOrder);
+        orderDriver.updateStatus(selectedOrder, Status.COMPLETED);
         showOrderDetails(selectedOrder);
         updateButtonsVisibility(selectedOrder);
 
