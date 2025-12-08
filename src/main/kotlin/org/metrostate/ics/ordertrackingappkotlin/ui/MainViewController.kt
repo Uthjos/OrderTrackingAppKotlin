@@ -1,5 +1,6 @@
 package org.metrostate.ics.ordertrackingappkotlin.ui
 
+import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.fxml.FXML
@@ -11,6 +12,7 @@ import javafx.scene.Parent
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.layout.*
+import javafx.scene.text.Text
 import org.metrostate.ics.ordertrackingappkotlin.Directory
 import org.metrostate.ics.ordertrackingappkotlin.OrderListener
 import org.metrostate.ics.ordertrackingappkotlin.Status
@@ -20,11 +22,6 @@ import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory
 import java.io.File
 import java.io.IOException
 
-/**
- * Controller for the main view of the Order Tracking application.
- * Manages the display and filtering of orders.
- * Automatically detects and imports new order files added to the importOrders directory with OrderListener.
- */
 class MainViewController {
 
     @FXML
@@ -40,9 +37,14 @@ class MainViewController {
 
     private val parserFactory = ParserFactory()
     private var orderListener: OrderListener? = null
+    private var selectedOrderBox: VBox? = null
+    private var selectedOrder: Order? = null
+
+    private val BASE_BOX_STYLE =
+        "-fx-border-color: #cccccc; -fx-border-width: 1; -fx-background-color: #DFE8E8; -fx-cursor: hand;"
+
 
     @FXML
-    @Suppress("UNUSED")
     private fun initialize() {
         // Set up OrderListener to monitor importOrders directory
         val importOrdersPath = Directory.getDirectory(Directory.importOrders)
@@ -92,7 +94,7 @@ class MainViewController {
         orderListener?.stop()
     }
 
-    fun populateOrderTiles() { // create an order tile for each loaded order
+    private fun populateOrderTiles() { // create an order tile for each loaded order
         ordersContainer.children.clear()
 
         if (orders.isEmpty()) {
@@ -194,6 +196,143 @@ class MainViewController {
             scene.root = detailsRoot
         } catch (e: IOException) {
             e.printStackTrace()
+        }
+    }
+
+    /**
+     * Filters the orders displayed in the GUI based on the selected status and type.
+     */
+    private fun applyFilters() {
+        val selectedStatus = statusFilter.value
+        val selectedType = typeFilter.value
+
+        // Clears existing children first to prevent duplicate child errors
+        ordersContainer.children.clear()
+
+        // reuse existing boxes when possible to avoid replacing nodes
+        val existing: MutableMap<Int?, VBox?> = HashMap<Int?, VBox?>()
+        for (node in ordersContainer.children) {
+            if (node !is VBox) continue
+            val ud = node.userData
+            if (ud is Int) {
+                existing[ud] = node
+            }
+        }
+
+        val newChildren: MutableList<Node?> = ArrayList<Node?>()
+        // just All for now
+        for (order in orders) {
+            val statusMatch = selectedStatus == "All" || order.status.toString() == selectedStatus
+            val typeMatch = selectedType == "All" || order.type.toString() == selectedType
+
+            if (statusMatch && typeMatch) {
+                var box = existing.get(order.orderID)//need explicit here since orderID is an int
+                if (box == null) {
+                    box = createOrderTile(order) as VBox?
+                } else {
+                    // update userData just in case and refresh labels
+                    box.userData = order.orderID
+                    refreshOrderBox(box, order)
+                    val finalBox: VBox? = box
+                }
+                /*box.onMouseClicked = EventHandler { evt: MouseEvent? ->
+                    selectOrderBox(finalBox)
+                    selectedOrder = order
+                    showOrderDetails(order)
+
+                 }*/
+                newChildren.add(box)
+            }
+        }
+
+        ordersContainer.children.setAll(newChildren)
+
+        // re-select the previously selected order if it is still displayed
+        val found: VBox? = findOrderBoxForOrder(ordersContainer,selectedOrder)
+        if (found != null) selectOrderBox(found)
+        //updateButtonsVisibility(selectedOrder)
+    }
+
+    /**
+     * Finds the left-side VBox for a given order by matching the "Order #<id>" label text.
+     *
+     * @param order The order to locate
+     * @return      The VBox corresponding to the order, or null
+    </id> */
+    private fun findOrderBoxForOrder(node:Node, order: Order?): VBox? {
+        if(node is Pane)
+      for (node in node.children) {
+          if (node is Label &&  node.text.contains(order?.orderID.toString())) {
+              return node.parent as VBox?
+          }
+          else if (node is Text && node.text.contains(order?.orderID.toString())) {
+              return node.parent as VBox?
+          }
+          else if (node is Pane){
+              for (node in node.children) {
+                  return findOrderBoxForOrder(node, order)
+              }
+          }
+      }
+        return null
+    }
+
+    /**
+     * Updates the labels inside an orderBox (left-side list) to reflect current order state.
+     *
+     * @param orderBox  The VBox representing the order
+     * @param order     The order whose data will be displayed
+     */
+    private fun refreshOrderBox(orderBox: VBox, order: Order) {
+        val boxToUpdate: VBox = orderBox
+        val orderCopy: Order = order
+        // do UI update on the JavaFX Application Thread
+        Platform.runLater(Runnable {
+            try {
+                // topRow: [orderTitle, statusLabel]
+                if (!boxToUpdate.children.isEmpty()) {
+                    if (boxToUpdate.children[0] is HBox) {
+                        val topRow = boxToUpdate.children[0] as HBox
+                        if (topRow.children.size > 1 && topRow.children[1] is Label) {
+                            val statusLabel = topRow.children[1] as Label
+                            statusLabel.text = (orderCopy.status.toString())
+                            statusLabel.style = "-fx-text-fill: " + orderCopy.status.color + ";"
+                        }
+                    }
+
+                    // secondRow: [typeLabel, spacer, companyLabel]
+                    if (boxToUpdate.children.size > 1 && boxToUpdate.children[1] is HBox) {
+                        val secondRow = boxToUpdate.children[1] as HBox
+                        if (!secondRow.children.isEmpty() && secondRow.children.first() is Label) {
+                            val typeLabel = secondRow.children.first() as Label
+                            typeLabel.text = orderCopy.type.toString()
+                            typeLabel.style = "-fx-text-fill: " + orderCopy.type.color + "; -fx-font-weight: bold;"
+                        }
+                    }
+                }
+                if (boxToUpdate !== selectedOrderBox) {
+                    selectOrderBox(boxToUpdate)
+                } else {
+                    boxToUpdate.style = "$BASE_BOX_STYLE -fx-effect: dropshadow(gaussian, rgba(158,158,158,0.6), 14, 0.5, 0, 0); -fx-border-color: #9e9e9e; -fx-border-width: 1;"
+                }
+            } catch (e: java.lang.Exception) {
+                // let thread die
+            }
+        })
+    }
+
+    /**
+     * Visual indicator for selected order box.
+     *
+     * @param box The VBox representing the order to select
+     */
+    private fun selectOrderBox(box: VBox?) {
+        selectedOrderBox?.style = BASE_BOX_STYLE
+        if (box != null) {
+            // selected order style around box
+            val SELECTED_BOX_STYLE = "$BASE_BOX_STYLE -fx-effect: dropshadow(gaussian, rgba(158,158,158,0.6), 14, 0.5, 0, 0); -fx-border-color: #9e9e9e; -fx-border-width: 1;"
+            box.style = SELECTED_BOX_STYLE
+            selectedOrderBox = box
         }
     }
 }
