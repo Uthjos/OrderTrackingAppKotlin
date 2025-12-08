@@ -32,22 +32,10 @@ class OrderDetailsController {
         orderDetailsContainer.children.clear()
 
         orderDetailsContainer.children.add(createInfoGrid(order))
-
         orderDetailsContainer.children.add(Separator())
-
-        orderDetailsContainer.children.add(createSectionTitle("Items"))
         orderDetailsContainer.children.add(createItemsList(order))
-
         orderDetailsContainer.children.add(Separator())
-
-        orderDetailsContainer.children.add(createSectionTitle("Pricing"))
         orderDetailsContainer.children.add(createPricingSection(order))
-    }
-
-    private fun createSectionTitle(title: String): Label {
-        val label = Label(title)
-        label.style = "-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"
-        return label
     }
 
     private fun createInfoGrid(order: Order): GridPane {
