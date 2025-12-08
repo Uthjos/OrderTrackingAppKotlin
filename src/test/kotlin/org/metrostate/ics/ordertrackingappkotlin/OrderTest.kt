@@ -3,7 +3,9 @@ package org.metrostate.ics.ordertrackingappkotlin
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.metrostate.ics.ordertrackingappkotlin.order.DineInOrder
 import org.metrostate.ics.ordertrackingappkotlin.order.FoodItem
+import org.metrostate.ics.ordertrackingappkotlin.order.Order
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -24,7 +26,7 @@ class OrderTest {
         foodList.add(foodItem2)
         foodList.add(foodItem3)
         foodList.add(foodItem4)
-        order = Order(1,Type.DINE_IN,1758034800000,foodList)
+        order = DineInOrder(1,1758034800000,foodList)
     }
     @Test
     fun sumPrice() {

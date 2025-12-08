@@ -8,7 +8,6 @@ class TypeTest {
     fun toStringTest() {
         assertEquals("Dine-In", Type.DINE_IN.toString())
         assertEquals("To-go", Type.TOGO.toString())
-        assertEquals("Pickup", Type.PICKUP.toString())
         assertEquals("Delivery", Type.DELIVERY.toString())
         assertEquals("NULL TYPE", Type.DEFAULT.toString())
 
