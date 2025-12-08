@@ -260,15 +260,19 @@ class SavedJSONParser : Parser {
             orderId, date, totalPrice, orderStatus!!, foodItemList, orderType!!,
             kitchenTip, serverTip, driverTip
         )
+        // make sure nextOrderNumber is ahead of any restored saved orders
+        if (orderId >= nextOrderNumber) {
+            nextOrderNumber = orderId + 1
+        }
 
         if (originalCompany != null && !originalCompany.isEmpty()) {
-            if (originalCompany.startsWith("Restored - ")) {
+            if (originalCompany.startsWith("Restored from save - ")) {
                 order.company = originalCompany
             } else {
-                order.company = "Restored - $originalCompany"
+                order.company = "Restored from save- $originalCompany"
             }
         } else {
-            order.company = "Restored - Unknown"
+            order.company = "Restored from save"
         }
 
         return order
