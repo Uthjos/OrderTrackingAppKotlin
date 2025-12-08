@@ -51,13 +51,17 @@ class OrderTest {
                 "\n" +
                 "Status: Waiting\n" +
                 "Type: Dine-In\n" +
-                "Items: \n" +
+                "Items:\n" +
                 "  1x Apple - \$1.50 each\n" +
                 "  2x Orange - \$2.30 each\n" +
                 "  3x Taco - \$3.99 each\n" +
                 "  4x Milk - \$4.10 each\n" +
                 "\n" +
-                "Total Price: \$34.47"
+                "Total Price: \$34.47\n" +
+                "Kitchen Tip: \$0.00\n" +
+                "Server Tip: \$0.00\n" +
+                "\n" +
+                "Grand Total: \$34.47"
         assertEquals(expectedString, order.toString())
     }
 
