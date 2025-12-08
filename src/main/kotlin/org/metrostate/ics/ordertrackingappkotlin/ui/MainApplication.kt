@@ -6,6 +6,10 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
 
+/**
+ * Main application class for the Order Tracking application.
+ * Initializes and launches the JavaFX application.
+ */
 class MainApplication : Application() {
     private var mainViewController: MainViewController? = null
 
