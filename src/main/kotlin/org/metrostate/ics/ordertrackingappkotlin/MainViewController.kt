@@ -11,7 +11,7 @@ import org.metrostate.ics.ordertrackingappkotlin.order.DeliveryOrder
 import org.metrostate.ics.ordertrackingappkotlin.order.Order
 import java.io.IOException
 
-class HelloController {
+class MainViewController {
 
     @FXML
     var ordersContainer = VBox()
