@@ -11,10 +11,8 @@ import java.io.IOException
  * Provides methods to add, start, complete, display, and export orders.
  */
 class OrderDriver {
-    /**
-     * @return List of all orders
-     */
-    val orders: MutableList<Order>
+
+    val orders: MutableList<Order> = ArrayList()
     private var lastCancelledOrder: Order? = null
 
     /**
@@ -83,13 +81,6 @@ class OrderDriver {
             } catch (ignored: Exception) {
             }
         }
-    }
-
-    /**
-     * Constructs a new OrderDriver with empty lists for all orders, incomplete orders, and completed orders (empty constructor).
-     */
-    init {
-        orders = ArrayList<Order>()
     }
 
     /**
