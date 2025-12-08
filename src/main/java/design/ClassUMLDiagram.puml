@@ -5,194 +5,333 @@ class Launcher {
     + main(args: String[]) : void
 }
 
-class OrderTrackerApp {
-    - orderListener: OrderListener
-
-    + start(stage: Stage) : void
-    - getTestOrdersPath() : String
+interface OrderFileCallback {
+    + onNewOrderFile(file: File): void
 }
 
 class OrderListener {
-    - directoryPath : Path
-    - callback : OrderFileCallback
-    - executorService : ExecutorService
-    - running : boolean
-    - processedFiles : Set<String>
+    - directoryPath: Path
+    - callback: OrderFileCallback
+    - executorService: ExecutorService
+    - running: boolean
+    - processedFiles: Set<String>
 
     + OrderListener(directoryPath: String, callback: OrderFileCallback)
-    - waitForFileReadable(file: File, baseSleepMillis: long) : boolean
-    - loadExistingFiles() : void
-    + start() : void
-    + stop() : void
-    + run() : void
+    + start(): void
+    + stop(): void
+    + run(): void
+    - waitForFileReadable(file: File, baseSleepMillis: long): boolean
+    - loadExistingFiles(): void
 }
 
-interface OrderFileCallback {
-    + onNewOrderFile(file: File) : void
+package "order"{
+class DeliveryOrder {
+    - kitchenTip: Double
+    - driverTip: Double
+
+    + constructor()
+    + constructor(orderId: Int, date: Long, foodList: MutableList<FoodItem>)
+    + constructor(orderId: Int, date: Long, totalPrice: Double, status: Status,
+                    foodList: MutableList<FoodItem>, kitchenTip: Double, driverTip: Double)
+    + getKitchenTip(): Double
+    + setKitchenTip(amount: Double): void
+    + getDriverTip(): Double
+    + setDriverTip(amount: Double): void
+    + getTotalTips(): Double
+    + calculateGrandTotal(): Double
+    + toString(): String
 }
 
-class OrderTrackerController {
-    - ordersContainer : VBox
-    - detailContainer : VBox
-    - scrollPane : ScrollPane
-    - cancelButton : Button
-    - undoButton : Button
-    - startButton : Button
-    - completeButton : Button
-    - clearAllOrdersButton : Button
-    - statusFilter : ComboBox<String>
-    - typeFilter : ComboBox<String>
-    - orderFiles : List<String>
-    - orderListener : OrderListener
-    - orderDriver : OrderDriver
-    - selectedOrderBox : VBox
-    - selectedOrder : Order
-    - driverListener : OrderDriver.OrderChangeListener
-    - BASE_BOX_STYLE : String {final}
+class DineInOrder {
+    - kitchenTip: Double
+    - serverTip: Double
 
-    + initialize() : void
-    + setOrderListener(orderListener: OrderListener) : void
-    + setOrderDriver(driver: OrderDriver) : void
-    + exitApplication() : void
-    + clearAllOrders() : void
-    - updateClearAllButtonVisibility() : void
-    - saveStateOnExit() : void
-    + addOrderFile(file: File) : void
-    - createOrderBox(sourceName: String, order: Order) : VBox
-    - updateButtonsVisibility(order: Order) : void
-    - showOrderDetails(order: Order) : void
-    - selectOrderBox(box: VBox) : void
-    - statusColor(status: Status) : String
-    - typeColor(formattedType: String) : String
-    - cancelSelectedOrder() : void
-    - undoCancel() : void
-    - startSelectedOrder() : void
-    - completeSelectedOrder() : void
-    - refreshOrderBox(orderBox: VBox, order: Order) : void
-    - findOrderBoxForOrder(order: Order) : VBox
-    - applyFilters() : void
-}
-
-class OrderDriver {
-    - orders : List<Order>
-    - lastCancelledOrder : Order
-    - listeners : List<OrderChangeListener>
-    + OrderDriver()
-    + addListener(l: OrderChangeListener) : void
-    + removeListener(l: OrderChangeListener) : void
-    - notifyOrderAdded(o: Order) : void
-    - notifyOrderChanged(o: Order) : void
-    + addOrder(order: Order) : void
-    + getOrderCount() : int
-    + startOrder(order: Order) : void
-    + completeOrder(order: Order) : void
-    + orderExportJSON(order: Order, fileDirectory: String) : void
-    + saveAllOrdersToJSON(fileDirectory: String) : void
-    + clearAllOrders() : void
-    + getOrders() : List<Order>
-    + cancelOrderGUI(order: Order) : boolean
-    + uncancelOrder(order: Order) : boolean
-}
-
-interface OrderChangeListener {
-    + orderAdded(order: Order) : void
-    + orderChanged(order: Order) : void
-}
-
-class Parser {
-    - nextOrderNumber : int {static}
-
-    + setNextOrderNumber(orderID : int) : void {static}
-    + parseJSONOrder(file : File) : Order {static}
-    + parseXMLOrder(file : File) : Order {static}
-    + parseSavedJSONOrder(file : File) : Order {static}
-    - getNextOrderNumber() : int {static}
-    + main(args: String[]) : void {static}
-}
-
-class Order {
-    - orderId : int
-    - date : long
-    - totalPrice : double
-    - type : Type
-    - status : Status
-    - foodList : ArrayList<FoodItem>
-    - company : String
-
-    + Order()
-    + Order(orderId: int, type: Type, date: long, foodList: List<FoodItem>)
-    + Order(orderId: int, date: long, totalPrice: double, type: Type, status: Status, foodList: List<FoodItem>)
-    + getDate() : long
-    + getTotalPrice() : double
-    + getType() : Type
-    + getStatus() : Status
-    + getFoodList() : ArrayList<FoodItem>
-    + getOrderID() : int
-    + sumPrice() : double
-    + addFoodItem(f: FoodItem) : boolean
-    + setStatus(newStatus: Status) : void
-    + toString() : String
-    + getCompany() : String
-    + setCompany(company: String) : void
-    + parseOrderStatus(stringStatus: String) : Status
-    + parseOrderType(stringType: String) : Type
-    + displayStatus() : String
-    + displayType() : String
+    + constructor()
+    + constructor(orderId: Int, date: Long, foodList: MutableList<FoodItem>)
+    + constructor(orderId: Int, date: Long, totalPrice: Double, status: Status,
+                  foodList: MutableList<FoodItem>, kitchenTip: Double, serverTip: Double)
+    + getKitchenTip(): Double
+    + setKitchenTip(amount: Double): void
+    + getServerTip(): Double
+    + setServerTip(amount: Double): void
+    + getTotalTips(): Double
+    + calculateGrandTotal(): Double
+    + toString(): String
 }
 
 class FoodItem {
-    - name : String
-    - quantity : int
-    - price : double
-
-    + FoodItem()
-    + FoodItem(name: String, quantity: int, price: double)
-    + getName() : String
-    + setName(name: String) : void
-    + getQuantity() : int
-    + setQuantity(quantity: int) : void
-    + getPrice() : double
-    + setPrice(price: double) : void
-    + toString() : String
-}
-enum Status {
-    cancelled
-    completed
-    inProgress
-    waiting
+    + name: String
+    + quantity: Int
+    + price: Double
+    + FoodItem(name: String = "Null", quantity: Int = 0, price: Double = 0.0)
     + toString(): String
 }
 
-enum Type {
-    togo
-    pickup
-    delivery
+interface TippableOrder {
+    + getKitchenTip(): Double
+    + setKitchenTip(amount: Double): void
+    + getTotalTips(): Double
+    + calculateGrandTotal(): Double
+}
+
+abstract class Order {
+    + orderID: Int
+    + date: Long
+    + totalPrice: Double
+    + type: Type
+    + status: Status
+    + foodList: ArrayList<FoodItem>
+    + company: String?
+    + sumPrice(): Double
+    + addFoodItem(f: FoodItem?): Boolean
+    + formatBaseOrder(): String
+}
+
+class OrderDriver {
+    + orders: MutableList<Order>
+
+    + addListener(l: OrderChangeListener?): void
+    + removeListener(l: OrderChangeListener?): void
+    + addOrder(order: Order?): void
+    + updateStatus(order: Order, newStatus: Status): Boolean
+    + saveAllOrdersToJSON(fileDirectory: String): void
+    + clearAllOrders(): void
+    + orderCount: Int
+    {static} + orderExportJSON(order: Order, fileDirectory: String): void
+}
+
+interface OrderChangeListener {
+    + orderAdded(order: Order?): void
+    + orderChanged(order: Order?): void
+}
+
+interface TippableOrder {
+    + getKitchenTip(): Double
+    + setKitchenTip(amount: Double)
+    + getTotalTips(): Double
+    + calculateGrandTotal(): Double
+}
+
+class ToGoOrder {
+    - kitchenTip: Double
+
+    + constructor()
+    + constructor(orderId: Int, date: Long, foodList: MutableList<FoodItem>)
+    + constructor(orderId: Int, date: Long, totalPrice: Double, status: Status,
+                foodList: MutableList<FoodItem>, kitchenTip: Double)
+    + getKitchenTip(): Double
+    + setKitchenTip(amount: Double): void
+    + getTotalTips(): Double
+    + calculateGrandTotal(): Double
     + toString(): String
+}
+}
+
+package "parser" {
+
+    interface Parser {
+        +parse(file: File): Order
+        {static} +nextOrderNumber: int
+    }
+
+    class JSONParser {
+        +parse(file: File): Order
+    }
+
+    class XMLParser {
+        +parse(file: File): Order
+    }
+
+    class SavedJSONParser {
+        +parse(file: File): Order
+    }
+
+    class ParserUtils {
+        +createOrderByType(orderId: int, date: long, foodList: MutableList<FoodItem>,
+                type: Type, kitchenTip: double = 0.0, serverTip: double = 0.0, driverTip: double = 0.0): Order
+        +restoreOrderByType(orderId: int, date: long, totalPrice: double, status: Status,
+                foodList: MutableList<FoodItem>, type: Type, kitchenTip: double = 0.0, serverTip: double = 0.0,
+                driverTip: double = 0.0): Order
+        +main()
+    }
+}
+package "parser"{
+    class ParserFactory {
+        -parser: Parser?
+        +getParser(file: File): Parser
+    }
 }
 
 enum Directory {
-    + savedOrders
-    + testOrders
-    + importOrders
-    - path : String
-
-    - Directory(path: String)
-    + getPath() : String
-    + getDirectory(directory: Directory) : String
-    - createDirectory(directory: String) : String
+    +savedOrders
+    +testOrders
+    +importOrders
+    +historyOrders
+    -path: String
+    -createDirectory(directory: String): String
+    +getDirectory(directory: Directory): String
+    +deleteFilesInDirectory(directory: Directory)
+    +backupFilesInDirectory(copyFromDir: Directory, destDir: Directory)
 }
 
-Launcher --> "1" OrderTrackerApp
-OrderTrackerApp "1" --> "1" OrderListener
+class OrderTrackerApp {
+    -orderListener: OrderListener
+    -driver: OrderDriver
+    +start(stage: Stage): void
+    -loadSavedOrders(): void
+    -saveCurrentState(): void
+}
+
+class OrderTrackerController {
+    -ordersContainer: VBox
+    -detailContainer: VBox
+    -scrollPane: ScrollPane
+    -cancelButton: Button
+    -undoButton: Button
+    -startButton: Button
+    -completeButton: Button
+    -clearAllOrdersButton: Button
+    -statusFilter: ComboBox<String>
+    -typeFilter: ComboBox<String>
+    -orderFiles: List<String>
+    -orderListener: OrderListener
+    -orderDriver: OrderDriver
+    -selectedOrderBox: VBox
+    -selectedOrder: Order
+    -driverListener: OrderDriver.OrderChangeListener
+    -BASE_BOX_STYLE: String
+
+    +initialize(): void
+    +setOrderListener(orderListener: OrderListener): void
+    +setOrderDriver(driver: OrderDriver): void
+    +exitApplication(): void
+    +clearAllOrders(): void
+    +addOrderFile(file: File): void
+    -updateClearAllButtonVisibility(): void
+    -createOrderBox(sourceName: String, order: Order): VBox
+    -updateButtonsVisibility(order: Order): void
+    -showOrderDetails(order: Order): void
+    -selectOrderBox(box: VBox): void
+    -statusColor(status: Status): String
+    -typeColor(formattedType: String): String
+    -cancelSelectedOrder(): void
+    -undoCancel(): void
+    -startSelectedOrder(): void
+    -completeSelectedOrder(): void
+    -refreshOrderBox(orderBox: VBox, order: Order): void
+    -findOrderBoxForOrder(order: Order): VBox
+    -applyFilters(): void
+}
+
+class SaveState {
+    +saveStateOnExit(orderDriver: OrderDriver): void
+}
+
+enum Status {
+    -color: String
+    +CANCELLED
+    +COMPLETED
+    +IN_PROGRESS
+    +WAITING
+    +toString(): String
+}
+
+enum Type {
+    -color: String
+    +TOGO
+    +DELIVERY
+    +DINE_IN
+    +DEFAULT
+    +toString(): String
+}
+
+package "UI" {
+    class MainApplication {
+        - mainViewController: MainViewController?
+        - mainViewRoot: Parent?
+        + start(stage: Stage): void
+    }
+}
+
+package "UI" {
+    class MainViewController {
+        - ordersContainer: VBox
+        - statusFilter: ComboBox<String>
+        - typeFilter: ComboBox<String>
+        - orders: MutableList<Order>
+        - parserFactory: ParserFactory
+        - orderListener: OrderListener?
+        - selectedOrderBox: VBox?
+        - selectedOrder: Order?
+        + initialize()
+        + handleNewOrder(file: File)
+        + shutdown()
+        + populateOrderTiles()
+        + createOrderTile(order: Order): Node
+        + openOrderDetails(order: Order)
+        + applyFilters()
+        + findOrderBoxForOrder(node: Node, order: Order?): VBox?
+        + refreshOrderBox(orderBox: VBox, order: Order)
+        + selectOrderBox(box: VBox?)
+    }
+}
+
+package "UI" {
+    class OrderDetailsController {
+        - titleLabel: Label
+        - orderDetailsContainer: VBox
+        + setOrderDetails(order: Order)
+        - addInfoRow(grid: GridPane, row: int, label: String, value: String, valueColor: String?)
+        - addPricingRow(container: VBox, label: String, amount: Double, isTotal: Boolean)
+        + close()
+    }
+}
+
+Order <|-- DeliveryOrder
+Order <|-- DineInOrder
+Order <|-- ToGoOrder
+
+TippableOrder <|.. DeliveryOrder
+TippableOrder <|.. DineInOrder
+TippableOrder <|.. ToGoOrder
+
+Parser <|.. JSONParser
+Parser <|.. XMLParser
+Parser <|.. SavedJSONParser
+
+Launcher "1" --> "1" OrderTrackerApp
+
+OrderDriver "1" --> "*" Order
+OrderDriver "1" --> "*" OrderChangeListener
+
+MainViewController "1" --> "*" Order
+MainViewController "0..1" --> OrderListener
+MainViewController "1" --> ParserFactory
+
+OrderDetailsController "0..1" --> Order
+
 OrderListener "1" --> "1" OrderFileCallback
-OrderListener "1" --> "1" OrderTrackerController
-OrderListener "1" ..> "1" Directory
-OrderTrackerController "1" --> "1" Parser
+
+ParserFactory "1" --> "1..*" Parser
+
+SaveState "1" --> "1" OrderDriver
+OrderTrackerApp "1" --> "1" OrderListener
+OrderTrackerApp "1" --> "1" OrderDriver
+
 OrderTrackerController "1" --> "1" OrderDriver
-OrderDriver "1" --> "0..*" OrderChangeListener
-OrderDriver "1" --> "1..*" Order
-Order "1" --> "1..*" FoodItem
-Order "1" --> "1" Status
+OrderTrackerController "1" --> "1" OrderListener
+OrderTrackerController "0..*" --> Order
+
 Order "1" --> "1" Type
-Parser "1" ..> "1" Directory
+Order "1" --> "1" Status
+
+OrderDriver "1" --> "0..*" Directory
+SaveState "1" --> "1" Directory
+
+ParserUtils "1" --> "*" Order
+ParserUtils "1" --> "*" Type
+ParserUtils "1" --> "*" Status
+
+Order "1" --> "*" FoodItem
+
 @enduml

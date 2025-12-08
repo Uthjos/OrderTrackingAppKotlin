@@ -12,6 +12,11 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+/**
+ * Controller for the Order Details view.
+ * Manages displaying detailed information about a selected order
+ * and handling status updates to the order.
+ */
 class OrderDetailsController {
 
     @FXML
@@ -159,7 +164,13 @@ class OrderDetailsController {
     private fun close() {
         try {
             val mainViewRoot = MainApplication.mainViewRoot
+            val mainViewController = MainApplication.mainViewController
             if (mainViewRoot != null) {
+                // Refresh the main view to show any status changes
+                mainViewController?.populateOrderTiles()
+
+                //saveStateonExit here
+
                 val scene = orderDetailsContainer.scene
                 scene.root = mainViewRoot
             } else {
