@@ -65,31 +65,27 @@ class MainViewController {
 
         if (orders.isEmpty()) {
             // no orders imported message
-            val emptyStateBox = VBox()
-            emptyStateBox.alignment = javafx.geometry.Pos.CENTER
-            emptyStateBox.spacing = 2.0
-            emptyStateBox.style = "-fx-padding: 60;"
+            val noOrdersBox = VBox()
+            noOrdersBox.alignment = javafx.geometry.Pos.CENTER
+            noOrdersBox.spacing = 2.0
+            noOrdersBox.style = "-fx-padding: 80; -fx-background-color: #f8f9fa; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 12;"
+            VBox.setMargin(noOrdersBox, javafx.geometry.Insets(20.0, 20.0, 20.0, 20.0))
 
             val icon = Label("☹")
-            icon.style = "-fx-font-size: 100;"
+            icon.style = "-fx-font-size: 72; -fx-opacity: 0.6;"
 
-            val message1= Label("No Orders Found")
-            message1.style = "-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333333;"
-            VBox.setMargin(message1, javafx.geometry.Insets(10.0, 0.0, 10.0, 0.0))
+            val message1= Label("No orders found")
+            message1.style = "-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #333333;"
+            VBox.setMargin(message1, javafx.geometry.Insets(12.0, 0.0, 8.0, 0.0))
 
-            val message2Row = HBox()
-            message2Row.alignment = javafx.geometry.Pos.CENTER
-
-            val message2 = Label("Add valid order file(s) to ")
+            val message2 = Label("Add valid order file(s) to")
             message2.style = "-fx-font-size: 13; -fx-text-fill: #666666;"
 
             val path = Label("orderFiles/importOrders")
             path.style = "-fx-font-size: 13; -fx-text-fill: #333333; -fx-font-weight: bold;"
 
-            message2Row.children.addAll(message2, path)
-
-            emptyStateBox.children.addAll(icon, message1, message2Row)
-            ordersContainer.children.add(emptyStateBox)
+            noOrdersBox.children.addAll(icon, message1, message2, path)
+            ordersContainer.children.add(noOrdersBox)
         } else {
             for (order in orders) {
                 val tile = createOrderTile(order)
@@ -100,8 +96,16 @@ class MainViewController {
 
     private fun createOrderTile(order: Order): Node { // create vbox with order id and status for an order
         val box = VBox()
-        box.style = "-fx-border-color: #e0e0e0; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10; -fx-cursor: hand;"
-        box.spacing = 6.0
+        box.style = "-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);"
+        box.spacing = 8.0
+
+        // hover effect
+        box.setOnMouseEntered {
+            box.style = "-fx-background-color: #f8f9fa; -fx-border-color: #1565c0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 3);"
+        }
+        box.setOnMouseExited {
+            box.style = "-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);"
+        }
 
         // Title row with order ID on left and type on right
         val titleRow = HBox(8.0)
