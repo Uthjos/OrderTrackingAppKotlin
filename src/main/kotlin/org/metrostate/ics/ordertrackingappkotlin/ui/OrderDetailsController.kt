@@ -53,7 +53,7 @@ class OrderDetailsController {
         addInfoRow(infoGrid, 1, "Date:", formattedDate)
         addInfoRow(infoGrid, 2, "Type:", order.type.toString(), order.type.color)
         addInfoRow(infoGrid, 3, "Status:", order.status.toString(), order.status.color)
-        addInfoRow(infoGrid, 4, "Company:", order.company!!)
+        addInfoRow(infoGrid, 4, "Company:", order.company?.removePrefix("Restored from save- ") ?: "Unknown")
         orderDetailsContainer.children.add(infoGrid)
 
         orderDetailsContainer.children.add(Separator())
