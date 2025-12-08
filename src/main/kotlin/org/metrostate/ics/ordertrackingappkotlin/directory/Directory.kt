@@ -16,7 +16,8 @@ enum class Directory(
     val path: String
 ) {
     savedOrders("orderFiles/savedOrders"), //current saved orders
-    importOrders("orderFiles/importOrders"); //new orders to import
+    importOrders("orderFiles/importOrders"),
+    historyOrders("orderFiles/historyOrders"); //new orders to import
 
     companion object {
         /**
@@ -24,7 +25,7 @@ enum class Directory(
          * @param directory
          * @return
          */
-        private fun createDirectory(directory: String): String {
+        fun createDirectory(directory: String): String {
             val f = File(directory)
             if (!f.exists()) {
                 f.mkdirs()

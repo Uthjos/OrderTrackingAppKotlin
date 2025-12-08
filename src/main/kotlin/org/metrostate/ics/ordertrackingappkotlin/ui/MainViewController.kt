@@ -81,6 +81,9 @@ class MainViewController {
             orders.add(order)
             populateOrderTiles()
 
+            OrderDriver.orderExportJSON(order, Directory.getDirectory(Directory.savedOrders))
+            Directory.deleteFile(file)
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
