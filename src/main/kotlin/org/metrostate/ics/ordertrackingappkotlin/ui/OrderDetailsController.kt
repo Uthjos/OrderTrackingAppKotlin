@@ -6,24 +6,37 @@ import javafx.scene.control.Label
 import javafx.scene.control.Separator
 import javafx.scene.layout.*
 import org.metrostate.ics.ordertrackingappkotlin.order.*
+import org.metrostate.ics.ordertrackingappkotlin.Status
+import javafx.scene.control.Button
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+/**
+ * Controller for the Order Details view.
+ * Manages displaying detailed information about a selected order
+ * and handling status updates to the order.
+ */
 class OrderDetailsController {
 
     @FXML
     var titleLabel = Label()
-
     @FXML
     var orderDetailsContainer = VBox()
+    @FXML
+    var cancelButton = Button()
+    @FXML
+    var startButton = Button()
+    @FXML
+    var completeButton = Button()
+    @FXML
+    var resubmitButton = Button()
 
 
-    // functions here to handle status update buttons / dynamic button visibility based on current status
-
-
+    private var currentOrder: Order? = null
 
     fun setOrderDetails(order: Order) {
+        currentOrder = order
         titleLabel.text = "Order #${order.orderID}"
         orderDetailsContainer.children.clear()
 
@@ -78,6 +91,44 @@ class OrderDetailsController {
         pricingBox.children.add(Separator().apply { VBox.setMargin(this, Insets(5.0, 0.0, 5.0, 0.0)) })
         addPricingRow(pricingBox, "Grand Total:  ", order.calculateGrandTotal(), true)
         orderDetailsContainer.children.add(pricingBox)
+
+        updateButtonVisibility()
+    }
+
+    private fun updateButtonVisibility() {
+        val order = currentOrder ?: return
+        startButton.isVisible = order.status == Status.WAITING
+        completeButton.isVisible = order.status == Status.IN_PROGRESS
+        cancelButton.isVisible = order.status != Status.COMPLETED && order.status != Status.CANCELLED
+        resubmitButton.isVisible = order.status == Status.CANCELLED
+    }
+
+    @FXML
+    @Suppress("UNUSED")
+    private fun handleStart() {
+        currentOrder?.status = Status.IN_PROGRESS
+        currentOrder?.let { setOrderDetails(it) }
+    }
+
+    @FXML
+    @Suppress("UNUSED")
+    private fun handleComplete() {
+        currentOrder?.status = Status.COMPLETED
+        currentOrder?.let { setOrderDetails(it) }
+    }
+
+    @FXML
+    @Suppress("UNUSED")
+    private fun handleCancel() {
+        currentOrder?.status = Status.CANCELLED
+        currentOrder?.let { setOrderDetails(it) }
+    }
+
+    @FXML
+    @Suppress("UNUSED")
+    private fun handleResubmit() {
+        currentOrder?.status = Status.WAITING
+        currentOrder?.let { setOrderDetails(it) }
     }
 
     private fun addInfoRow(grid: GridPane, row: Int, label: String, value: String, valueColor: String? = null) {
@@ -113,7 +164,13 @@ class OrderDetailsController {
     private fun close() {
         try {
             val mainViewRoot = MainApplication.mainViewRoot
+            val mainViewController = MainApplication.mainViewController
             if (mainViewRoot != null) {
+                // Refresh the main view to show any status changes
+                mainViewController?.populateOrderTiles()
+
+                //saveStateonExit here
+
                 val scene = orderDetailsContainer.scene
                 scene.root = mainViewRoot
             } else {
