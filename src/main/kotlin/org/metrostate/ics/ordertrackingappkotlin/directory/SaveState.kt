@@ -1,4 +1,4 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.directory
 
 import org.metrostate.ics.ordertrackingappkotlin.order.OrderDriver
 

@@ -1,7 +1,7 @@
 package org.metrostate.ics.ordertrackingappkotlin.order
 
-import org.metrostate.ics.ordertrackingappkotlin.Status
-import org.metrostate.ics.ordertrackingappkotlin.Type
+import org.metrostate.ics.ordertrackingappkotlin.order.Status
+import org.metrostate.ics.ordertrackingappkotlin.order.Type
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
