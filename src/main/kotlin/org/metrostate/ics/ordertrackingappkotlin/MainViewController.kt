@@ -36,6 +36,7 @@ class MainViewController {
 
         // Start listening for new order files
         orderListener?.start()
+        populateOrderTiles()
     }
 
     /**
@@ -62,9 +63,38 @@ class MainViewController {
     private fun populateOrderTiles() { // create an order tile for each loaded order
         ordersContainer.children.clear()
 
-        for (order in orders) {
-            val tile = createOrderTile(order)
-            ordersContainer.children.add(tile)
+        if (orders.isEmpty()) {
+            // no orders imported message
+            val emptyStateBox = VBox()
+            emptyStateBox.alignment = javafx.geometry.Pos.CENTER
+            emptyStateBox.spacing = 2.0
+            emptyStateBox.style = "-fx-padding: 60;"
+
+            val icon = Label("☹")
+            icon.style = "-fx-font-size: 100;"
+
+            val message1= Label("No Orders Found")
+            message1.style = "-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333333;"
+            VBox.setMargin(message1, javafx.geometry.Insets(10.0, 0.0, 10.0, 0.0))
+
+            val message2Row = HBox()
+            message2Row.alignment = javafx.geometry.Pos.CENTER
+
+            val message2 = Label("Add valid order file(s) to ")
+            message2.style = "-fx-font-size: 13; -fx-text-fill: #666666;"
+
+            val path = Label("orderFiles/importOrders")
+            path.style = "-fx-font-size: 13; -fx-text-fill: #333333; -fx-font-weight: bold;"
+
+            message2Row.children.addAll(message2, path)
+
+            emptyStateBox.children.addAll(icon, message1, message2Row)
+            ordersContainer.children.add(emptyStateBox)
+        } else {
+            for (order in orders) {
+                val tile = createOrderTile(order)
+                ordersContainer.children.add(tile)
+            }
         }
     }
 
