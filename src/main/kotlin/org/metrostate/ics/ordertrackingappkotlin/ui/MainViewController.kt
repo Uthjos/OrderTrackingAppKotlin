@@ -11,7 +11,6 @@ import javafx.scene.Parent
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.layout.*
-import javafx.scene.text.Text
 import org.metrostate.ics.ordertrackingappkotlin.Directory
 import org.metrostate.ics.ordertrackingappkotlin.OrderListener
 import org.metrostate.ics.ordertrackingappkotlin.Status
@@ -38,6 +37,7 @@ class MainViewController {
     private var orderListener: OrderListener? = null
 
     @FXML
+    @Suppress("UNUSED")
     private fun initialize() {
         // Set up OrderListener to monitor importOrders directory
         val importOrdersPath = Directory.getDirectory(Directory.importOrders)
