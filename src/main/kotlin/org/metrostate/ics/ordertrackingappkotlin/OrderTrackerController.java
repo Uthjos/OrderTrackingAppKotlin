@@ -111,10 +111,8 @@ public class OrderTrackerController {
 
         if (statusFilter != null) {
             statusFilter.getItems().add("All");
-            for (Status s : Status.values()) {
-                Order temp = new Order();
-                temp.setStatus(s);
-                statusFilter.getItems().add(temp.displayStatus());
+            for (Status s : Status.getEntries()) {
+                statusFilter.getItems().add(s.toString());
             }
             statusFilter.setValue("All");
             statusFilter.setOnAction(e -> applyFilters());
@@ -122,7 +120,7 @@ public class OrderTrackerController {
 
         if (typeFilter != null) {
             typeFilter.getItems().add("All");
-            for (Type t : Type.values()) {
+                for (Type t : Type.getEntries()) {
                 typeFilter.getItems().add(t.toString());
             }
             typeFilter.setValue("All");
