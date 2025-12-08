@@ -62,7 +62,7 @@ class MainViewController {
             statusFilter.items.add(s.toString())
         }
         statusFilter.value = "All"
-        statusFilter.onAction = EventHandler { e: ActionEvent? -> applyFilters() }
+        statusFilter.onAction = EventHandler { e: ActionEvent? -> populateOrderTiles() }
 
         //set up type filter box
         typeFilter.getItems().add("All")
@@ -70,7 +70,7 @@ class MainViewController {
             typeFilter.getItems().add(t.toString())
         }
         typeFilter.value = "All"
-        typeFilter.onAction = EventHandler { e: ActionEvent? -> applyFilters() }
+        typeFilter.onAction = EventHandler { e: ActionEvent? -> populateOrderTiles() }
     }
 
     /**
@@ -102,13 +102,14 @@ class MainViewController {
             val noOrdersBox = VBox()
             noOrdersBox.alignment = Pos.CENTER
             noOrdersBox.spacing = 2.0
-            noOrdersBox.style = "-fx-padding: 80; -fx-background-color: #f8f9fa; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 12;"
+            noOrdersBox.style =
+                "-fx-padding: 80; -fx-background-color: #f8f9fa; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 12;"
             VBox.setMargin(noOrdersBox, Insets(20.0, 20.0, 20.0, 20.0))
 
             val icon = Label("☹")
             icon.style = "-fx-font-size: 72; -fx-opacity: 0.6;"
 
-            val message1= Label("No orders found")
+            val message1 = Label("No orders found")
             message1.style = "-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #333333;"
             VBox.setMargin(message1, Insets(12.0, 0.0, 8.0, 0.0))
 
@@ -122,8 +123,12 @@ class MainViewController {
             ordersContainer.children.add(noOrdersBox)
         } else {
             for (order in orders) {
-                val tile = createOrderTile(order)
-                ordersContainer.children.add(tile)
+                val statusMatch = statusFilter.value == "All" || order.status.toString() == statusFilter.value
+                val typeMatch = typeFilter.value == "All" || order.type.toString() == typeFilter.value
+                if (statusMatch && typeMatch) {
+                    val tile = createOrderTile(order)
+                    ordersContainer.children.add(tile)
+                }
             }
         }
     }

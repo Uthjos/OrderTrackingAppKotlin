@@ -6,11 +6,18 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
 
+/**
+ * Main application class for the Order Tracking application.
+ * Initializes and launches the JavaFX application.
+ */
 class MainApplication : Application() {
     private var mainViewController: MainViewController? = null
 
     companion object {
         var mainViewRoot: Parent? = null
+            private set
+
+        var mainViewController: MainViewController? = null
             private set
     }
 
@@ -20,7 +27,9 @@ class MainApplication : Application() {
 
         mainViewRoot = root
 
-        mainViewController = fxmlLoader.getController()
+        val controller = fxmlLoader.getController<MainViewController>()
+        this.mainViewController = controller
+        MainApplication.mainViewController = controller
 
         val scene = Scene(root)
         stage.title = "Order Tracker"

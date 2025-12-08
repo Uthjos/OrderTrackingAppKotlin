@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import org.metrostate.ics.ordertrackingappkotlin.order.Order;
 import org.metrostate.ics.ordertrackingappkotlin.order.OrderDriver;
 import org.metrostate.ics.ordertrackingappkotlin.parser.Parser;
+import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -281,6 +282,28 @@ public class OrderTrackerController {
             return;
         }
 
+        new Thread(() -> {
+            Order order = null;
+            try {
+                ParserFactory parserFactory = new ParserFactory();
+                order = parserFactory.getParser(file).parse(file);
+            } catch (IOException e) {
+                System.err.println("Error reading file: " + e.getMessage());
+                // order left null
+            }
+
+            final Order fOrder = order;
+            Platform.runLater(() -> {
+                if (fOrder != null && orderDriver != null) {
+                    orderDriver.addOrder(fOrder);
+                    applyFilters();
+                } else {
+                    VBox orderBox = createOrderBox(fileName, null);
+                    ordersContainer.getChildren().addFirst(orderBox);
+                }
+            });
+        }).start();
+        /*
         // parse the order on a background thread
         orderFiles.add(fileName);
         new Thread(() -> {
@@ -311,6 +334,7 @@ public class OrderTrackerController {
                 }
             });
         }).start();
+        */
     }
 
     /**
@@ -343,12 +367,12 @@ public class OrderTrackerController {
             orderTitle.setText("Order #" + order.getOrderID() + ":");
 
             // status text and color
-            String statusText = order.displayStatus();
+            String statusText = order.getStatus().toString();
             statusLabel.setText(statusText);
             statusLabel.setStyle("-fx-text-fill: " + statusColor(order.getStatus()) + ";");
 
             // type formatting
-            String type = order.displayType();
+            String type = order.getType().toString();
             typeLabel.setText(type);
             typeLabel.setStyle("-fx-text-fill: " + typeColor(type) + "; -fx-font-weight: bold;");
 
@@ -505,7 +529,7 @@ public class OrderTrackerController {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                if (orderDriver.cancelOrderGUI(selectedOrder)) {
+                if (orderDriver.updateStatus(selectedOrder, Status.CANCELLED)) {
                     // rebuild the list so UI reflects the current state
                     Platform.runLater(() -> {
                         applyFilters();
@@ -539,7 +563,7 @@ public class OrderTrackerController {
      */
     private void undoCancel() {
         if (orderDriver == null || selectedOrder == null) return;
-        boolean success = orderDriver.uncancelOrder(selectedOrder);
+        boolean success = orderDriver.updateStatus(selectedOrder, Status.WAITING);
         // refresh UI
         Platform.runLater(() -> {
             if (success) {
@@ -564,7 +588,7 @@ public class OrderTrackerController {
      */
     private void startSelectedOrder() {
         if (selectedOrder == null || orderDriver == null) return;
-        orderDriver.startOrder(selectedOrder);
+        orderDriver.updateStatus(selectedOrder, Status.IN_PROGRESS);
         showOrderDetails(selectedOrder);
         updateButtonsVisibility(selectedOrder);
 
@@ -594,7 +618,7 @@ public class OrderTrackerController {
      */
     private void completeSelectedOrder() {
         if (selectedOrder == null || orderDriver == null) return;
-        orderDriver.completeOrder(selectedOrder);
+        orderDriver.updateStatus(selectedOrder, Status.COMPLETED);
         showOrderDetails(selectedOrder);
         updateButtonsVisibility(selectedOrder);
 
@@ -641,7 +665,7 @@ public class OrderTrackerController {
                 if (!boxToUpdate.getChildren().isEmpty()) {
                     if (boxToUpdate.getChildren().get(0) instanceof HBox topRow) {
                         if (topRow.getChildren().size() > 1 && topRow.getChildren().get(1) instanceof Label statusLabel) {
-                            statusLabel.setText(orderCopy.displayStatus());
+                            statusLabel.setText(orderCopy.getStatus().toString());
                             statusLabel.setStyle("-fx-text-fill: " + statusColor(orderCopy.getStatus()) + ";");
                         }
                     }
@@ -649,8 +673,8 @@ public class OrderTrackerController {
                     // secondRow: [typeLabel, spacer, companyLabel]
                     if (boxToUpdate.getChildren().size() > 1 && boxToUpdate.getChildren().get(1) instanceof HBox secondRow) {
                         if (!secondRow.getChildren().isEmpty() && secondRow.getChildren().getFirst() instanceof Label typeLabel) {
-                            typeLabel.setText(orderCopy.displayType());
-                            typeLabel.setStyle("-fx-text-fill: " + typeColor(orderCopy.displayType()) + "; -fx-font-weight: bold;");
+                            typeLabel.setText(orderCopy.getType().toString());
+                            typeLabel.setStyle("-fx-text-fill: " + typeColor(orderCopy.getType().toString()) + "; -fx-font-weight: bold;");
                         }
                     }
                 }
@@ -741,8 +765,8 @@ public class OrderTrackerController {
         // just All for now
         for (Order order : orderDriver.getOrders()) {
             boolean statusMatch = selectedStatus.equals("All") ||
-                    order.displayStatus().equalsIgnoreCase(selectedStatus);
-            boolean typeMatch = selectedType.equals("All") || order.displayType().equalsIgnoreCase(selectedType);
+                    order.getStatus().toString().equalsIgnoreCase(selectedStatus);
+            boolean typeMatch = selectedType.equals("All") || order.getType().toString().equalsIgnoreCase(selectedType);
 
             if (statusMatch && typeMatch) {
                 VBox box = existing.get(order.getOrderID());
