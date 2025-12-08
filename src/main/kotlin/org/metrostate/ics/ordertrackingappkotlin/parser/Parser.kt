@@ -266,7 +266,7 @@ class SavedJSONParser : Parser {
         }
 
         if (originalCompany != null && !originalCompany.isEmpty()) {
-            if (originalCompany.startsWith("Restored from save - ")) {
+            if (originalCompany.startsWith("Restored from save- ")) {
                 order.company = originalCompany
             } else {
                 order.company = "Restored from save- $originalCompany"
