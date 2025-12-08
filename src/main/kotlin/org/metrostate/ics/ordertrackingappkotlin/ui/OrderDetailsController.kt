@@ -12,6 +12,11 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+/**
+ * Controller for the Order Details view.
+ * Manages displaying detailed information about a selected order
+ * and handling status updates to the order.
+ */
 class OrderDetailsController {
 
     @FXML

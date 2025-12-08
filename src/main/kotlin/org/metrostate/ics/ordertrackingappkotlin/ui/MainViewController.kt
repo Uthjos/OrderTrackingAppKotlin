@@ -20,6 +20,11 @@ import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory
 import java.io.File
 import java.io.IOException
 
+/**
+ * Controller for the main view of the Order Tracking application.
+ * Manages the display and filtering of orders.
+ * Automatically detects and imports new order files added to the importOrders directory with OrderListener.
+ */
 class MainViewController {
 
     @FXML
