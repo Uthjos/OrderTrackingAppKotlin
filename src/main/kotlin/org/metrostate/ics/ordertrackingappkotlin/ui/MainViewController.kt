@@ -32,13 +32,10 @@ class MainViewController {
     @FXML
     private fun initialize() {
         // Set up OrderListener to monitor importOrders directory
-        val importOrdersPath = Directory.Companion.getDirectory(Directory.importOrders)
+        val importOrdersPath = Directory.getDirectory(Directory.importOrders)
 
-        orderListener = OrderListener(importOrdersPath, object : OrderListener.OrderFileCallback {
-            override fun onNewOrderFile(file: File) {
-                handleNewOrder(file)
-            }
-        })
+        orderListener = OrderListener(importOrdersPath
+        ) { file -> handleNewOrder(file) }
 
         // Start listening for new order files
         orderListener?.start()
