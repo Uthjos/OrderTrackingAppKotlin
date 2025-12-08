@@ -73,11 +73,28 @@ class MainViewController {
         box.style = "-fx-border-color: #e0e0e0; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10; -fx-cursor: hand;"
         box.spacing = 6.0
 
+        // Title row with order ID on left and type on right
+        val titleRow = HBox(8.0)
         val title = Label("Order #${order.orderID}")
         title.style = "-fx-font-weight: bold; -fx-font-size: 14;"
+        titleRow.children.add(title)
+
+        val titleSpacer = javafx.scene.layout.Region()
+        HBox.setHgrow(titleSpacer, javafx.scene.layout.Priority.ALWAYS)
+
+        val typeLabel = Label(order.type.toString())
+        typeLabel.style = "-fx-text-fill: ${order.type.color}; -fx-font-weight: bold; -fx-font-size: 12;"
+
+        titleRow.children.addAll(titleSpacer, typeLabel)
 
         val statusRow = HBox(8.0)
-        statusRow.children.addAll(Label("Status:"), Label(order.status.toString()))
+        statusRow.children.add(Label("Status:"))
+
+        // Create status label with color from Status enum
+        val statusLabel = Label(order.status.toString())
+        statusLabel.style = "-fx-text-fill: ${order.status.color}; -fx-font-weight: bold;"
+        statusRow.children.add(statusLabel)
+
         val spacer = javafx.scene.layout.Region()
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS)
 
@@ -86,7 +103,7 @@ class MainViewController {
 
         statusRow.children.addAll(spacer, companyLabel)
 
-        box.children.addAll(title, statusRow)
+        box.children.addAll(titleRow, statusRow)
 
         box.setOnMouseClicked { _ -> //clicking the order tile will open a different window with order details
             openOrderDetails(order)
