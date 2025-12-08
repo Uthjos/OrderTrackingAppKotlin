@@ -1,12 +1,18 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.ui
 
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
+import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+import javafx.scene.layout.Region
 import javafx.scene.layout.VBox
+import org.metrostate.ics.ordertrackingappkotlin.Directory
+import org.metrostate.ics.ordertrackingappkotlin.OrderListener
 import org.metrostate.ics.ordertrackingappkotlin.order.Order
 import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory
 import java.io.File
@@ -26,7 +32,7 @@ class MainViewController {
     @FXML
     private fun initialize() {
         // Set up OrderListener to monitor importOrders directory
-        val importOrdersPath = Directory.getDirectory(Directory.importOrders)
+        val importOrdersPath = Directory.Companion.getDirectory(Directory.importOrders)
 
         orderListener = OrderListener(importOrdersPath, object : OrderListener.OrderFileCallback {
             override fun onNewOrderFile(file: File) {
@@ -66,17 +72,17 @@ class MainViewController {
         if (orders.isEmpty()) {
             // no orders imported message
             val noOrdersBox = VBox()
-            noOrdersBox.alignment = javafx.geometry.Pos.CENTER
+            noOrdersBox.alignment = Pos.CENTER
             noOrdersBox.spacing = 2.0
             noOrdersBox.style = "-fx-padding: 80; -fx-background-color: #f8f9fa; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 12;"
-            VBox.setMargin(noOrdersBox, javafx.geometry.Insets(20.0, 20.0, 20.0, 20.0))
+            VBox.setMargin(noOrdersBox, Insets(20.0, 20.0, 20.0, 20.0))
 
             val icon = Label("☹")
             icon.style = "-fx-font-size: 72; -fx-opacity: 0.6;"
 
             val message1= Label("No orders found")
             message1.style = "-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #333333;"
-            VBox.setMargin(message1, javafx.geometry.Insets(12.0, 0.0, 8.0, 0.0))
+            VBox.setMargin(message1, Insets(12.0, 0.0, 8.0, 0.0))
 
             val message2 = Label("Add valid order file(s) to")
             message2.style = "-fx-font-size: 13; -fx-text-fill: #666666;"
@@ -107,14 +113,14 @@ class MainViewController {
             box.style = "-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);"
         }
 
-        // Title row with order ID on left and type on right
+        // Order ID on left, type on right colored from enum
         val titleRow = HBox(8.0)
         val title = Label("Order #${order.orderID}")
         title.style = "-fx-font-weight: bold; -fx-font-size: 14;"
         titleRow.children.add(title)
 
-        val titleSpacer = javafx.scene.layout.Region()
-        HBox.setHgrow(titleSpacer, javafx.scene.layout.Priority.ALWAYS)
+        val titleSpacer = Region()
+        HBox.setHgrow(titleSpacer, Priority.ALWAYS)
 
         val typeLabel = Label(order.type.toString())
         typeLabel.style = "-fx-text-fill: ${order.type.color}; -fx-font-weight: bold; -fx-font-size: 12;"
@@ -124,13 +130,13 @@ class MainViewController {
         val statusRow = HBox(8.0)
         statusRow.children.add(Label("Status:"))
 
-        // Create status label with color from Status enum
+        // status on left, colored from enum, company on right
         val statusLabel = Label(order.status.toString())
         statusLabel.style = "-fx-text-fill: ${order.status.color}; -fx-font-weight: bold;"
         statusRow.children.add(statusLabel)
 
-        val spacer = javafx.scene.layout.Region()
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS)
+        val spacer = Region()
+        HBox.setHgrow(spacer, Priority.ALWAYS)
 
         val companyLabel = Label(order.company ?: "Unknown")
         companyLabel.style = "-fx-text-fill: #666666; -fx-font-size: 11;"
