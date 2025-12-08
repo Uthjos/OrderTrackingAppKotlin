@@ -161,7 +161,7 @@ public class OrderTrackerController {
                     // orders on separate thread - update UI on JavaFX thread
                     Platform.runLater(() -> {
                         // save new order to savedOrders
-                        OrderDriver.Companion.orderExportJSON(order, Directory.Companion.getDirectory(Directory.savedOrders));
+                        OrderDriver.Companion.orderExportJSON(order, Directory.Companion.getDirectory(Directory.SavedOrders));
                         applyFilters();
                         updateClearAllButtonVisibility(); //only visible when there are orders
                     });
@@ -172,7 +172,7 @@ public class OrderTrackerController {
                     //another thread - update UI on JavaFX thread
                     Platform.runLater(() -> {
                         // save updated order to savedOrders
-                        OrderDriver.Companion.orderExportJSON(order, Directory.Companion.getDirectory(Directory.savedOrders));
+                        OrderDriver.Companion.orderExportJSON(order, Directory.Companion.getDirectory(Directory.SavedOrders));
                         applyFilters();
                         VBox box = findOrderBoxForOrder(order);
                         if (box != null) refreshOrderBox(box, order);
@@ -273,7 +273,7 @@ public class OrderTrackerController {
     private void saveStateOnExit() {
         if (orderDriver == null) return;
 
-        String savedOrdersPath = Directory.Companion.getDirectory(Directory.savedOrders);
+        String savedOrdersPath = Directory.Companion.getDirectory(Directory.SavedOrders);
 
         File savedOrdersDir = new File(savedOrdersPath);
         if (!savedOrdersDir.exists()) {
@@ -283,8 +283,8 @@ public class OrderTrackerController {
         orderDriver.saveAllOrdersToJSON(savedOrdersPath);
 
         // move all orders from import to test by copying and deleting originals (3 delete retries)
-        String importPath = Directory.Companion.getDirectory(Directory.importOrders);
-        String testPath = Directory.Companion.getDirectory(Directory.testOrders);
+        String importPath = Directory.Companion.getDirectory(Directory.ImportOrders);
+        String testPath = Directory.Companion.getDirectory(Directory.TestOrders);
 
         File importDir = new File(importPath);
         File testDir = new File(testPath);
