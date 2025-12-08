@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.metrostate.ics.ordertrackingappkotlin.order.Order;
+import org.metrostate.ics.ordertrackingappkotlin.order.OrderDriver;
 import org.metrostate.ics.ordertrackingappkotlin.parser.Parser;
 import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory;
 
@@ -42,7 +43,7 @@ public class OrderTrackerApp extends Application {
         controller.setOrderDriver(driver);
 
         // after saved orders are loaded, watch the importOrders directory
-        String importOrdersPath = Directory.Companion.getDirectory(Directory.ImportOrders);
+        String importOrdersPath = Directory.Companion.getDirectory(Directory.importOrders);
         orderListener = new OrderListener(importOrdersPath, controller::addOrderFile);
 
         controller.setOrderListener(orderListener);

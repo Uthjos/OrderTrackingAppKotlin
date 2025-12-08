@@ -1,10 +1,8 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.order
 
 import org.json.JSONArray
 import org.json.JSONObject
-import org.metrostate.ics.ordertrackingappkotlin.order.DeliveryOrder
-import org.metrostate.ics.ordertrackingappkotlin.order.DineInOrder
-import org.metrostate.ics.ordertrackingappkotlin.order.Order
+import org.metrostate.ics.ordertrackingappkotlin.Status
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
