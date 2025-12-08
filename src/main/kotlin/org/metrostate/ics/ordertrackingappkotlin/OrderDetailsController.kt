@@ -3,6 +3,7 @@ package org.metrostate.ics.ordertrackingappkotlin
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.TextArea
+import org.metrostate.ics.ordertrackingappkotlin.order.Order
 
 class OrderDetailsController {
 

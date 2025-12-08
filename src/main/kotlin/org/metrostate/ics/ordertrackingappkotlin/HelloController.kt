@@ -5,9 +5,10 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Label
-import javafx.scene.input.MouseEvent
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
+import org.metrostate.ics.ordertrackingappkotlin.order.DeliveryOrder
+import org.metrostate.ics.ordertrackingappkotlin.order.Order
 import java.io.IOException
 
 class HelloController {
@@ -23,14 +24,13 @@ class HelloController {
 
     val orders: MutableList<Order> = mutableListOf()
 
-    lateinit var exampleOrder: Order
+    lateinit var exampleOrder: DeliveryOrder
 
     @FXML
     private fun initialize() { // grab orders from list. creating one here for now just to have an example order in the gui. later can pull from orderDriver
 
-        exampleOrder = Order(
+        exampleOrder = DeliveryOrder(
             1,
-            Type.DELIVERY,
             System.currentTimeMillis(),
             mutableListOf(
                 FoodItem(name = "Burger", quantity = 2, price = 5.99),
@@ -39,8 +39,8 @@ class HelloController {
             )
         )
 
-        // Tip testing in Order class
-        exampleOrder.setTips(kitchen = 1.00, server = 2.00)
+        exampleOrder.setKitchenTip(1.00)
+        exampleOrder.setDriverTip(3.00)
 
         orders.add(exampleOrder)
 

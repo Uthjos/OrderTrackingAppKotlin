@@ -2,10 +2,8 @@ package org.metrostate.ics.ordertrackingappkotlin.parser
 
 import org.json.JSONObject
 import org.json.JSONTokener
-import org.metrostate.ics.ordertrackingappkotlin.FoodItem
-import org.metrostate.ics.ordertrackingappkotlin.Order
-import org.metrostate.ics.ordertrackingappkotlin.Status
-import org.metrostate.ics.ordertrackingappkotlin.Type
+import org.metrostate.ics.ordertrackingappkotlin.*
+import org.metrostate.ics.ordertrackingappkotlin.order.*
 import org.metrostate.ics.ordertrackingappkotlin.parser.Parser.Companion.nextOrderNumber
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -40,6 +38,59 @@ interface Parser {
             field = orderID + 1
         }
     }
+}
+
+/**
+ * Create the appropriate order type based on Type enum.
+ */
+fun createOrderByType(
+    orderId: Int,
+    date: Long,
+    foodList: MutableList<FoodItem>,
+    type: Type,
+    kitchenTip: Double = 0.0,
+    serverTip: Double = 0.0,
+    driverTip: Double = 0.0
+): Order {
+    val order: Order = when (type) {
+        Type.DELIVERY -> DeliveryOrder(orderId, date, foodList)
+        Type.DINE_IN -> DineInOrder(orderId, date, foodList)
+        Type.TOGO -> ToGoOrder(orderId, date, foodList)
+        else -> ToGoOrder(orderId, date, foodList)
+    }
+
+    order.setKitchenTip(kitchenTip)
+    if (order is DeliveryOrder) {
+        order.setDriverTip(driverTip)
+    } else if (order is DineInOrder) {
+        order.setServerTip(serverTip)
+    }
+
+    return order
+}
+
+/**
+ * Restore an order with status from saved state.
+ */
+fun restoreOrderByType(
+    orderId: Int,
+    date: Long,
+    totalPrice: Double,
+    status: Status,
+    foodList: MutableList<FoodItem>,
+    type: Type,
+    kitchenTip: Double = 0.0,
+    serverTip: Double = 0.0,
+    driverTip: Double = 0.0
+): Order {
+    val order: Order = when (type) {
+        Type.DELIVERY -> DeliveryOrder(orderId, date, totalPrice, status, foodList, kitchenTip, driverTip)
+        Type.DINE_IN -> DineInOrder(orderId, date, totalPrice, status, foodList, kitchenTip, serverTip)
+        Type.TOGO -> ToGoOrder(orderId, date, totalPrice, status, foodList, kitchenTip)
+        else -> ToGoOrder(orderId, date, totalPrice, status, foodList, kitchenTip)
+    }
+
+    return order
 }
 
 class JSONParser : Parser {
@@ -84,11 +135,10 @@ class JSONParser : Parser {
                 foodItemList.add(FoodItem(name, quantity, price))
             }
         }
-        val order = Order(
-            nextOrderNumber, orderType!!, orderDate, foodItemList
+        val order = createOrderByType(
+            nextOrderNumber, orderDate, foodItemList, orderType!!,
+            kitchenTip, serverTip, driverTip
         )
-
-        order.setTips(kitchenTip, serverTip, driverTip)
 
         order.company = "FoodHub (JSON)"
         return order
@@ -159,11 +209,10 @@ class XMLParser : Parser {
         }
 
 
-        val order = Order(
-            nextOrderNumber, orderType!!, orderDate, foodItemList
+        val order = createOrderByType(
+            nextOrderNumber, orderDate, foodItemList, orderType!!,
+            kitchenTip, serverTip, driverTip
         )
-
-        order.setTips(kitchenTip, serverTip, driverTip)
 
         order.company = "GrubStop (XML)"
         return order
@@ -216,9 +265,10 @@ class SavedJSONParser : Parser {
                 foodItemList.add(FoodItem(name, quantity, price))
             }
         }
-        val order = Order(orderId, date, totalPrice, orderType!!, orderStatus!!, foodItemList)
-
-        order.setTips(kitchenTip, serverTip, driverTip)
+        val order = restoreOrderByType(
+            orderId, date, totalPrice, orderStatus!!, foodItemList, orderType!!,
+            kitchenTip, serverTip, driverTip
+        )
 
         if (originalCompany != null && !originalCompany.isEmpty()) {
             if (originalCompany.startsWith("Restored - ")) {

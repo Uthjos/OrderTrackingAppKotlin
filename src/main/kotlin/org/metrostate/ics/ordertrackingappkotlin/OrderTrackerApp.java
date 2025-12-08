@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.metrostate.ics.ordertrackingappkotlin.order.Order;
 import org.metrostate.ics.ordertrackingappkotlin.parser.Parser;
 import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory;
 
@@ -90,7 +91,7 @@ public class OrderTrackerApp extends Application {
         for (File file : savedFiles) {
             try {
                 ParserFactory parserFactory = new ParserFactory();
-                Parser myParser = parserFactory.getParser(file.toString());
+                Parser myParser = parserFactory.getParser(file);
                 Order order = myParser.parse(file);
                 driver.addOrder(order);
                 // track maximum order ID from previous state

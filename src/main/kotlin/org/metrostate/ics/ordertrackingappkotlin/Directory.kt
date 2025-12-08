@@ -1,7 +1,10 @@
 package org.metrostate.ics.ordertrackingappkotlin
 
 import java.io.File
+import java.io.IOException
+import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 /**
  * The Directory Enum holds all data directories
@@ -12,9 +15,10 @@ enum class Directory(
      */
     val path: String
 ) {
-    SavedOrders("orderFiles/savedOrders"),
-    TestOrders("orderFiles/testOrders"),
-    ImportOrders("orderFiles/importOrders");
+    savedOrders("orderFiles/savedOrders"),
+    testOrders("orderFiles/testOrders"),
+    importOrders("orderFiles/importOrders"),
+    historyOrders("orderFiles/historyOrders");
 
     companion object {
         /**
@@ -42,5 +46,66 @@ enum class Directory(
             createDirectory(dirPath.toString())
             return dirPath.toString()
         }
+
+
+        /**
+         * will Delete all files in the directory in argument
+         */
+        fun deleteFilesInDirectory(directory: Directory) {
+            var fileDir: File = File(Directory.getDirectory(directory))
+            var files: Array<File>? = fileDir.listFiles()
+
+            if (files != null) {
+                for (f in files) {
+
+                    // try deleting original up to 4 times with longer delay each time
+                    var deleted = false
+                    for (attempt in 1..4) {
+                        try {
+                            deleted = Files.deleteIfExists(f.toPath())
+                            if (deleted || !f.exists()) break
+                        } catch (ioe: IOException) {
+                            // ignore and retry
+                        }
+                        try {
+                            Thread.sleep((100 * attempt).toLong())
+                        } catch (ie: InterruptedException) {
+                            Thread.currentThread().interrupt()
+                            break
+                        }
+                    }
+
+                    if (!deleted) {
+                        System.err.println("Failed to delete: " + f.getAbsolutePath())
+                    }
+                }
+            }
+        }
+
+        /**
+         * will Copy all Files in a Directory to another
+         */
+        fun backupFilesInDirectory(copyFromDir: Directory, destDir: Directory) {
+            val sourceDir = File(Directory.getDirectory(copyFromDir))
+            val targetDir = File(Directory.getDirectory(destDir))
+
+            val files = sourceDir.listFiles() ?: return
+
+
+            for (f in files) {
+                val dest: File = File(targetDir, f.getName())
+                try {
+                    // copy (overwrite if exists)
+                    Files.copy(f.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                } catch (e: IOException) {
+                    System.err.println("Failed to copy " + f.getAbsolutePath() + " to " + dest.getAbsolutePath() + ": " + e.message)
+                    continue
+                }
+            }
+        }
+
     }
+
+
+
 }

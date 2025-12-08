@@ -2,6 +2,9 @@ package org.metrostate.ics.ordertrackingappkotlin
 
 import org.json.JSONArray
 import org.json.JSONObject
+import org.metrostate.ics.ordertrackingappkotlin.order.DeliveryOrder
+import org.metrostate.ics.ordertrackingappkotlin.order.DineInOrder
+import org.metrostate.ics.ordertrackingappkotlin.order.Order
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -196,6 +199,19 @@ class OrderDriver {
             OrderJSON.put("type", order.type)
             OrderJSON.put("status", order.status)
             OrderJSON.put("company", order.company)
+
+            val tipJSON = JSONObject()
+            tipJSON.put("kitchenTip", JSONObject().put("amount", order.getKitchenTip()))
+
+            when (order) {
+                is DeliveryOrder -> {
+                    tipJSON.put("driverTip", JSONObject().put("amount", order.getDriverTip()))
+                }
+                is DineInOrder -> {
+                    tipJSON.put("serverTip", JSONObject().put("amount", order.getServerTip()))
+                }
+            }
+            OrderJSON.put("tip", tipJSON)
 
             val orderFoodsList = JSONArray()
             for (food in order.foodList) {
