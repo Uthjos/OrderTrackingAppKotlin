@@ -12,6 +12,9 @@ class MainApplication : Application() {
     companion object {
         var mainViewRoot: Parent? = null
             private set
+
+        var mainViewController: MainViewController? = null
+            private set
     }
 
     override fun start(stage: Stage) {
@@ -20,7 +23,9 @@ class MainApplication : Application() {
 
         mainViewRoot = root
 
-        mainViewController = fxmlLoader.getController()
+        val controller = fxmlLoader.getController<MainViewController>()
+        this.mainViewController = controller
+        MainApplication.mainViewController = controller
 
         val scene = Scene(root)
         stage.title = "Order Tracker"

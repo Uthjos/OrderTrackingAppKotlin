@@ -159,7 +159,11 @@ class OrderDetailsController {
     private fun close() {
         try {
             val mainViewRoot = MainApplication.mainViewRoot
+            val mainViewController = MainApplication.mainViewController
             if (mainViewRoot != null) {
+                // Refresh the main view to show any status changes
+                mainViewController?.populateOrderTiles()
+
                 val scene = orderDetailsContainer.scene
                 scene.root = mainViewRoot
             } else {
