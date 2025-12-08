@@ -58,27 +58,36 @@ enum class Directory(
             if (files != null) {
                 for (f in files) {
 
-                    // try deleting original up to 4 times with longer delay each time
-                    var deleted = false
-                    for (attempt in 1..4) {
-                        try {
-                            deleted = Files.deleteIfExists(f.toPath())
-                            if (deleted || !f.exists()) break
-                        } catch (ioe: IOException) {
-                            // ignore and retry
-                        }
-                        try {
-                            Thread.sleep((100 * attempt).toLong())
-                        } catch (ie: InterruptedException) {
-                            Thread.currentThread().interrupt()
-                            break
-                        }
-                    }
-
-                    if (!deleted) {
-                        System.err.println("Failed to delete: " + f.getAbsolutePath())
-                    }
+                    deleteFile(f);
                 }
+            }
+        }
+
+        /**
+         * will Delete specific File in argument
+         */
+        fun deleteFile(file: File) {
+            // try deleting original up to 4 times with longer delay each time
+            var deleted = false
+            for (attempt in 1..4) {
+                try {
+                    deleted = Files.deleteIfExists(file.toPath())
+                    if (deleted || !file.exists()) break
+                } catch (ioe: IOException) {
+                    // ignore and retry
+                }
+
+
+                try {
+                    Thread.sleep((100 * attempt).toLong())
+                } catch (ie: InterruptedException) {
+                    Thread.currentThread().interrupt()
+                    break
+                }
+            }
+
+            if (!deleted) {
+                System.err.println("Failed to delete: " + file.getAbsolutePath())
             }
         }
 
