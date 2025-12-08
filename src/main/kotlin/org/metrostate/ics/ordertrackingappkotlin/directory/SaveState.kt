@@ -10,9 +10,8 @@ class SaveState {
          * @param orderDriver
          */
         fun saveStateOnExit(orderDriver : OrderDriver){
-            orderDriver.saveAllOrdersToJSON(Directory.getDirectory(Directory.historyOrders))
+            orderDriver.saveAllOrdersToJSON(Directory.getDirectory(Directory.savedOrders))
 
-            Directory.deleteFilesInDirectory(Directory.savedOrders)
             Directory.deleteFilesInDirectory(Directory.importOrders)
         }
     }

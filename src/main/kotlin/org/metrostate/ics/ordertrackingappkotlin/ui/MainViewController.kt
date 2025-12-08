@@ -12,9 +12,11 @@ import javafx.scene.control.Label
 import javafx.scene.layout.*
 import org.metrostate.ics.ordertrackingappkotlin.directory.Directory
 import org.metrostate.ics.ordertrackingappkotlin.OrderListener
+import org.metrostate.ics.ordertrackingappkotlin.directory.SaveState
 import org.metrostate.ics.ordertrackingappkotlin.order.Status
 import org.metrostate.ics.ordertrackingappkotlin.order.Type
 import org.metrostate.ics.ordertrackingappkotlin.order.Order
+import org.metrostate.ics.ordertrackingappkotlin.order.OrderDriver
 import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory
 import java.io.File
 import java.io.IOException
@@ -86,6 +88,12 @@ class MainViewController {
 
     fun shutdown() {
         orderListener?.stop()
+
+        val orderDriver = OrderDriver()
+        for (order in orders) {
+            orderDriver.addOrder(order)
+        }
+        SaveState.saveStateOnExit(orderDriver)
     }
 
     /**

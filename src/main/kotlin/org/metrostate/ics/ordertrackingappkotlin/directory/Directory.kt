@@ -15,10 +15,9 @@ enum class Directory(
      */
     val path: String
 ) {
-    savedOrders("orderFiles/savedOrders"),
-    testOrders("orderFiles/testOrders"),
-    importOrders("orderFiles/importOrders"),
-    historyOrders("orderFiles/historyOrders");
+    savedOrders("orderFiles/savedOrders"), //current saved orders
+    importOrders("orderFiles/importOrders"), //new orders to import
+    historyOrders("orderFiles/historyOrders"); //archive directory
 
     companion object {
         /**
@@ -57,7 +56,9 @@ enum class Directory(
 
             if (files != null) {
                 for (f in files) {
-                    deleteFile(f);
+                    if (!f.name.endsWith(".txt", ignoreCase = true)) {
+                        deleteFile(f)
+                    }
                 }
             }
         }
