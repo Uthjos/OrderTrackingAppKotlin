@@ -7,8 +7,9 @@ import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
-import org.metrostate.ics.ordertrackingappkotlin.order.DeliveryOrder
 import org.metrostate.ics.ordertrackingappkotlin.order.Order
+import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory
+import java.io.File
 import java.io.IOException
 
 class MainViewController {
@@ -16,36 +17,46 @@ class MainViewController {
     @FXML
     var ordersContainer = VBox()
 
-    @FXML
-    var orderBoxIdLabel = Label()
-
-    @FXML
-    var orderBoxStatusLabel = Label()
 
     val orders: MutableList<Order> = mutableListOf()
 
-    lateinit var exampleOrder: DeliveryOrder
+    private val parserFactory = ParserFactory()
+    private var orderListener: OrderListener? = null
 
     @FXML
-    private fun initialize() { // grab orders from list. creating one here for now just to have an example order in the gui. later can pull from orderDriver
+    private fun initialize() {
+        // Set up OrderListener to monitor importOrders directory
+        val importOrdersPath = Directory.getDirectory(Directory.importOrders)
 
-        exampleOrder = DeliveryOrder(
-            1,
-            System.currentTimeMillis(),
-            mutableListOf(
-                FoodItem(name = "Burger", quantity = 2, price = 5.99),
-                FoodItem(name = "Fries", quantity = 1, price = 2.99),
-                FoodItem(name = "Soda", quantity = 3, price = 1.49)
-            )
-        )
+        orderListener = OrderListener(importOrdersPath, object : OrderListener.OrderFileCallback {
+            override fun onNewOrderFile(file: File) {
+                handleNewOrder(file)
+            }
+        })
 
-        exampleOrder.setKitchenTip(1.00)
-        exampleOrder.setDriverTip(3.00)
+        // Start listening for new order files
+        orderListener?.start()
+    }
 
-        orders.add(exampleOrder)
+    /**
+     * Called when a new order file is detected in the importOrders directory.
+     * Parses the file and adds the order to the list.
+     */
+    private fun handleNewOrder(file: File) {
+        try {
+            val parser = parserFactory.getParser(file)
+            val order = parser.parse(file)
 
-        populateOrderTiles()
+            orders.add(order)
+            populateOrderTiles()
 
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun shutdown() {
+        orderListener?.stop()
     }
 
     private fun populateOrderTiles() { // create an order tile for each loaded order
@@ -67,6 +78,13 @@ class MainViewController {
 
         val statusRow = HBox(8.0)
         statusRow.children.addAll(Label("Status:"), Label(order.status.toString()))
+        val spacer = javafx.scene.layout.Region()
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS)
+
+        val companyLabel = Label(order.company ?: "Unknown")
+        companyLabel.style = "-fx-text-fill: #666666; -fx-font-size: 11;"
+
+        statusRow.children.addAll(spacer, companyLabel)
 
         box.children.addAll(title, statusRow)
 
@@ -89,11 +107,5 @@ class MainViewController {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-    }
-
-    @FXML
-    @Suppress("unused")
-    private fun openOrderDetails() {
-        openOrderDetails(exampleOrder)
     }
 }
