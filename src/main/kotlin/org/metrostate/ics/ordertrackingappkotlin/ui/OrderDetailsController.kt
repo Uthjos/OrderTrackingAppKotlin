@@ -4,6 +4,8 @@ import javafx.fxml.FXML
 import javafx.geometry.Insets
 import javafx.scene.control.Label
 import javafx.scene.control.Separator
+import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.scene.layout.*
 import org.metrostate.ics.ordertrackingappkotlin.order.*
 import org.metrostate.ics.ordertrackingappkotlin.Status
@@ -120,8 +122,18 @@ class OrderDetailsController {
     @FXML
     @Suppress("UNUSED")
     private fun handleCancel() {
-        currentOrder?.status = Status.CANCELLED
-        currentOrder?.let { setOrderDetails(it) }
+        val order = currentOrder ?: return
+
+        val alert = Alert(Alert.AlertType.ERROR)
+        alert.title = "Confirm Cancellation"
+        alert.headerText = "Are you sure you want to cancel Order #${order.orderID}?"
+
+        alert.buttonTypes.setAll(ButtonType.YES, ButtonType.NO)
+        val result = alert.showAndWait()
+        if (result.isPresent && result.get() == ButtonType.YES) {
+            order.status = Status.CANCELLED
+            setOrderDetails(order)
+        }
     }
 
     @FXML
