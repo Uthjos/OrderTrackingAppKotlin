@@ -9,7 +9,11 @@ class ParserFactory(
 
     fun getParser(file: File): Parser {
         if (file.path.endsWith(".json")) {
-            parser = JSONParser()
+            if (file.name.startsWith("Saved_Order")) {
+                parser = SavedJSONParser()
+            } else {
+                parser = JSONParser()
+            }
         }
         if (file.path.endsWith(".xml")) {
             parser = XMLParser()
