@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import org.metrostate.ics.ordertrackingappkotlin.order.Order;
 import org.metrostate.ics.ordertrackingappkotlin.order.OrderDriver;
 import org.metrostate.ics.ordertrackingappkotlin.parser.Parser;
+import org.metrostate.ics.ordertrackingappkotlin.parser.ParserFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -281,6 +282,28 @@ public class OrderTrackerController {
             return;
         }
 
+        new Thread(() -> {
+            Order order = null;
+            try {
+                ParserFactory parserFactory = new ParserFactory();
+                order = parserFactory.getParser(file).parse(file);
+            } catch (IOException e) {
+                System.err.println("Error reading file: " + e.getMessage());
+                return; //stops if you can't read the file
+            }
+
+            final Order fOrder = order;
+            Platform.runLater(() -> {
+                if (fOrder != null && orderDriver != null) {
+                    orderDriver.addOrder(fOrder);
+                    applyFilters();
+                } else {
+                    VBox orderBox = createOrderBox(fileName, null);
+                    ordersContainer.getChildren().addFirst(orderBox);
+                }
+            });
+        }).start();
+        /*
         // parse the order on a background thread
         orderFiles.add(fileName);
         new Thread(() -> {
@@ -311,6 +334,7 @@ public class OrderTrackerController {
                 }
             });
         }).start();
+        */
     }
 
     /**
