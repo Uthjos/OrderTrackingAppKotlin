@@ -94,7 +94,7 @@ class MainViewController {
         orderListener?.stop()
     }
 
-    private fun populateOrderTiles() { // create an order tile for each loaded order
+    fun populateOrderTiles() { // create an order tile for each loaded order
         ordersContainer.children.clear()
 
         if (orders.isEmpty()) {
