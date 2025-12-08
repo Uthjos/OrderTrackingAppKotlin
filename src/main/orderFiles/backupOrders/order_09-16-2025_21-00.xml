@@ -1,6 +1,6 @@
 <Orders>
     <Order id="1758074400000">
-        <OrderType>dine-in</OrderType>
+        <OrderType>dine_in</OrderType>
         <Tip>
             <KitchenTip type="dollars">1.53</KitchenTip>
             <ServerTip type="dollars">2.30</ServerTip>

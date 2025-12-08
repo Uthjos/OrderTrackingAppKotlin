@@ -2,6 +2,7 @@ package org.metrostate.ics.ordertrackingappkotlin.parser
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.metrostate.ics.ordertrackingappkotlin.*
+import org.metrostate.ics.ordertrackingappkotlin.order.FoodItem
 import java.io.File
 
 class JSONParserTest {

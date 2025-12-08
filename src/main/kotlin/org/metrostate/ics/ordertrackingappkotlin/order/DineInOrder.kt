@@ -1,6 +1,5 @@
 package org.metrostate.ics.ordertrackingappkotlin.order
 
-import org.metrostate.ics.ordertrackingappkotlin.FoodItem
 import org.metrostate.ics.ordertrackingappkotlin.Status
 import org.metrostate.ics.ordertrackingappkotlin.Type
 

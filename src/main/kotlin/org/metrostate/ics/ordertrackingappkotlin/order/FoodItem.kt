@@ -1,4 +1,4 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.order
 
 /**
  * Represents a food item in an order.

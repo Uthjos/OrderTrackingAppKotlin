@@ -1,6 +1,6 @@
 {
   "order": {
-    "type": "dine-in",
+    "type": "dine_in",
     "tip": {
       "kitchenTip": {
         "type": "dollars",
