@@ -18,17 +18,17 @@
     </ScrollPane>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Button onAction="#close" text="← Back" style="-fx-background-color: #424242; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(66,66,66,0.3), 4, 0, 0, 2);">
+        <Button onAction="#close" text="↩" style="-fx-background-color: #e8e8e8; -fx-text-fill: #2c3e50; -fx-font-weight: bold; -fx-font-size: 36; -fx-padding: 2 8 2 8; -fx-background-radius: 6; -fx-cursor: hand; -fx-border-color: #b0b0b0; -fx-border-width: 1.5; -fx-border-radius: 6;">
             <HBox.margin>
                 <Insets top="5.0" />
             </HBox.margin>
         </Button>
-        <Button fx:id="startButton" onAction="#handleStart" text="Start" style="-fx-background-color: #1565c0; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand;">
+        <Button fx:id="startButton" onAction="#handleStart" text="Start order" style="-fx-background-color: #1565c0; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12; -fx-padding: 8 12 8 12; -fx-background-radius: 6; -fx-cursor: hand;">
             <HBox.margin>
                 <Insets top="5.0" />
             </HBox.margin>
         </Button>
-        <Button fx:id="completeButton" onAction="#handleComplete" text="Complete" style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand;">
+        <Button fx:id="completeButton" onAction="#handleComplete" text="Complete order" style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12; -fx-padding: 8 12 8 12; -fx-background-radius: 6; -fx-cursor: hand;">
             <HBox.margin>
                 <Insets top="5.0" />
             </HBox.margin>
