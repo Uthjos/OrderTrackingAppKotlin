@@ -60,23 +60,26 @@ class DirectoryTest {
     }
 
     @Test
-    fun `deleteFilesInDirectory deletes all files`(@TempDir tempDir: File) {
+    fun `deleteFilesInDirectory deletes all files except txt files`(@TempDir tempDir: File) {
         //Override User.dir so actual files don't get affected
         val originalUserDir = System.getProperty("user.dir")
         System.setProperty("user.dir", tempDir.absolutePath)
 
         try {
             val dirPath = Directory.getDirectory(Directory.importOrders)
-            val testFile1 = File(dirPath, "test1.txt").apply { writeText("test1") }
-            val testFile2 = File(dirPath, "test2.txt").apply { writeText("test2") }
+            val testFile1 = File(dirPath, "test1.md").apply { writeText("test1") }
+            val testFile2 = File(dirPath, "test2.md").apply { writeText("test2") }
+            val test3File = File(dirPath, "test3.txt").apply { writeText("test3") }
 
             assertTrue(testFile1.exists())
             assertTrue(testFile2.exists())
+            assertTrue(test3File.exists())
 
             Directory.deleteFilesInDirectory(Directory.importOrders)
 
             assertFalse(testFile1.exists())
             assertFalse(testFile2.exists())
+            assertTrue(test3File.exists())
 
         } finally {
             //sets System.getProperty("user.dir") back to normal
