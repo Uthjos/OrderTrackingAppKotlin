@@ -57,7 +57,6 @@ enum class Directory(
 
             if (files != null) {
                 for (f in files) {
-
                     deleteFile(f);
                 }
             }
