@@ -665,7 +665,7 @@ public class OrderTrackerController {
                 if (!boxToUpdate.getChildren().isEmpty()) {
                     if (boxToUpdate.getChildren().get(0) instanceof HBox topRow) {
                         if (topRow.getChildren().size() > 1 && topRow.getChildren().get(1) instanceof Label statusLabel) {
-                            statusLabel.setText(orderCopy.displayStatus());
+                            statusLabel.setText(orderCopy.getStatus().toString());
                             statusLabel.setStyle("-fx-text-fill: " + statusColor(orderCopy.getStatus()) + ";");
                         }
                     }
@@ -673,8 +673,8 @@ public class OrderTrackerController {
                     // secondRow: [typeLabel, spacer, companyLabel]
                     if (boxToUpdate.getChildren().size() > 1 && boxToUpdate.getChildren().get(1) instanceof HBox secondRow) {
                         if (!secondRow.getChildren().isEmpty() && secondRow.getChildren().getFirst() instanceof Label typeLabel) {
-                            typeLabel.setText(orderCopy.displayType());
-                            typeLabel.setStyle("-fx-text-fill: " + typeColor(orderCopy.displayType()) + "; -fx-font-weight: bold;");
+                            typeLabel.setText(orderCopy.getType().toString());
+                            typeLabel.setStyle("-fx-text-fill: " + typeColor(orderCopy.getType().toString()) + "; -fx-font-weight: bold;");
                         }
                     }
                 }
@@ -765,8 +765,8 @@ public class OrderTrackerController {
         // just All for now
         for (Order order : orderDriver.getOrders()) {
             boolean statusMatch = selectedStatus.equals("All") ||
-                    order.displayStatus().equalsIgnoreCase(selectedStatus);
-            boolean typeMatch = selectedType.equals("All") || order.displayType().equalsIgnoreCase(selectedType);
+                    order.getStatus().toString().equalsIgnoreCase(selectedStatus);
+            boolean typeMatch = selectedType.equals("All") || order.getType().toString().equalsIgnoreCase(selectedType);
 
             if (statusMatch && typeMatch) {
                 VBox box = existing.get(order.getOrderID());
