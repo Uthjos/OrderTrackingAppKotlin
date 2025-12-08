@@ -16,8 +16,7 @@ enum class Directory(
     val path: String
 ) {
     savedOrders("orderFiles/savedOrders"), //current saved orders
-    importOrders("orderFiles/importOrders"), //new orders to import
-    historyOrders("orderFiles/historyOrders"); //archive directory
+    importOrders("orderFiles/importOrders"); //new orders to import
 
     companion object {
         /**
@@ -51,12 +50,12 @@ enum class Directory(
          * will Delete all files in the directory in argument
          */
         fun deleteFilesInDirectory(directory: Directory) {
-            var fileDir: File = File(getDirectory(directory))
-            var files: Array<File>? = fileDir.listFiles()
+            val fileDir = File(getDirectory(directory))
+            val files: Array<File>? = fileDir.listFiles()
 
             if (files != null) {
                 for (f in files) {
-                    if (!f.name.endsWith(".txt", ignoreCase = true)) {
+                    if (!f.endsWith(".txt")) {
                         deleteFile(f)
                     }
                 }
@@ -73,14 +72,14 @@ enum class Directory(
                 try {
                     deleted = Files.deleteIfExists(file.toPath())
                     if (deleted || !file.exists()) break
-                } catch (ioe: IOException) {
+                } catch (_: IOException) {
                     // ignore and retry
                 }
 
 
                 try {
                     Thread.sleep((100 * attempt).toLong())
-                } catch (ie: InterruptedException) {
+                } catch (_: InterruptedException) {
                     Thread.currentThread().interrupt()
                     break
                 }
@@ -102,7 +101,7 @@ enum class Directory(
 
 
             for (f in files) {
-                val dest: File = File(targetDir, f.getName())
+                val dest = File(targetDir, f.getName())
                 try {
                     // copy (overwrite if exists)
                     Files.copy(f.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING)
