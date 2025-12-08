@@ -289,7 +289,7 @@ public class OrderTrackerController {
                 order = parserFactory.getParser(file).parse(file);
             } catch (IOException e) {
                 System.err.println("Error reading file: " + e.getMessage());
-                return; //stops if you can't read the file
+                // order left null
             }
 
             final Order fOrder = order;
