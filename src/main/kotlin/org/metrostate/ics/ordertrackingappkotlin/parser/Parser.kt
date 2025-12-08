@@ -2,7 +2,6 @@ package org.metrostate.ics.ordertrackingappkotlin.parser
 
 import org.json.JSONObject
 import org.json.JSONTokener
-import org.metrostate.ics.ordertrackingappkotlin.*
 import org.metrostate.ics.ordertrackingappkotlin.order.*
 import org.metrostate.ics.ordertrackingappkotlin.parser.Parser.Companion.nextOrderNumber
 import org.w3c.dom.Element
@@ -29,14 +28,6 @@ interface Parser {
          * @return int, next Order ID number
          */
         get() = field++
-        /**
-         * set method that should only be called on when recalling current state
-         * from a failed closure, and adds 1.
-         * @param orderID   The maximum OrderID from current state
-         */
-        set(orderID) {
-            field = orderID + 1
-        }
     }
 }
 
@@ -292,14 +283,14 @@ class SavedJSONParser : Parser {
 fun main() {
 
     //test for json file type
-    var file = File("src/main/orderFiles/backupOrders/order_09-16-2025_10-00.json")
+    var file = File("src/test/resources/order_09-16-2025_10-00.json")
     val parserFactory = ParserFactory()
     var myParser = parserFactory.getParser(file)
     var myOrder = myParser.parse(file)
     println(myOrder)
 
     //test for xml file type
-    file = File("src/main/orderFiles/backupOrders/order_09-16-2025_16-00.xml")
+    file = File("src/test/resources/order_09-16-2025_21-00.xml")
     myParser = parserFactory.getParser(file)
     myOrder = myParser.parse(file)
     println(myOrder)

@@ -6,7 +6,6 @@ import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
@@ -36,6 +35,8 @@ class MainViewController {
     private val parserFactory = ParserFactory()
     private var orderListener: OrderListener? = null
 
+    private val orderTileBuilder = OrderTileBuilder(this)
+
 
     @FXML
     private fun initialize() {
@@ -55,7 +56,7 @@ class MainViewController {
             statusFilter.items.add(s.toString())
         }
         statusFilter.value = "All"
-        statusFilter.onAction = EventHandler { e: ActionEvent? -> populateOrderTiles() }
+        statusFilter.onAction = EventHandler { _: ActionEvent? -> populateOrderTiles() }
 
         //set up type filter box
         typeFilter.getItems().add("All")
@@ -63,7 +64,7 @@ class MainViewController {
             typeFilter.getItems().add(t.toString())
         }
         typeFilter.value = "All"
-        typeFilter.onAction = EventHandler { e: ActionEvent? -> populateOrderTiles() }
+        typeFilter.onAction = EventHandler { _: ActionEvent? -> populateOrderTiles() }
     }
 
     /**
@@ -87,6 +88,9 @@ class MainViewController {
         orderListener?.stop()
     }
 
+    /**
+     * Refreshes screen and updates OrderTiles with all orders
+     */
     fun populateOrderTiles() { // create an order tile for each loaded order
         ordersContainer.children.clear()
 
@@ -119,66 +123,15 @@ class MainViewController {
                 val statusMatch = statusFilter.value == "All" || order.status.toString() == statusFilter.value
                 val typeMatch = typeFilter.value == "All" || order.type.toString() == typeFilter.value
                 if (statusMatch && typeMatch) {
-                    val tile = createOrderTile(order)
+
+                    val tile = orderTileBuilder.createOrderTile(order)
                     ordersContainer.children.add(tile)
                 }
             }
         }
     }
 
-    private fun createOrderTile(order: Order): Node { // create vbox with order id and status for an order
-        val box = VBox()
-        box.style = "-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);"
-        box.spacing = 8.0
-
-        // hover effect
-        box.setOnMouseEntered {
-            box.style = "-fx-background-color: #f8f9fa; -fx-border-color: #1565c0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 3);"
-        }
-        box.setOnMouseExited {
-            box.style = "-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);"
-        }
-
-        // Order ID on left, type on right colored from enum
-        val titleRow = HBox(8.0)
-        val title = Label("Order #${order.orderID}")
-        title.style = "-fx-font-weight: bold; -fx-font-size: 14;"
-        titleRow.children.add(title)
-
-        val titleSpacer = Region()
-        HBox.setHgrow(titleSpacer, Priority.ALWAYS)
-
-        val typeLabel = Label(order.type.toString())
-        typeLabel.style = "-fx-text-fill: ${order.type.color}; -fx-font-weight: bold; -fx-font-size: 12;"
-
-        titleRow.children.addAll(titleSpacer, typeLabel)
-
-        val statusRow = HBox(8.0)
-        statusRow.children.add(Label("Status:"))
-
-        // status on left, colored from enum, company on right
-        val statusLabel = Label(order.status.toString())
-        statusLabel.style = "-fx-text-fill: ${order.status.color}; -fx-font-weight: bold;"
-        statusRow.children.add(statusLabel)
-
-        val spacer = Region()
-        HBox.setHgrow(spacer, Priority.ALWAYS)
-
-        val companyLabel = Label(order.company ?: "Unknown")
-        companyLabel.style = "-fx-text-fill: #666666; -fx-font-size: 11;"
-
-        statusRow.children.addAll(spacer, companyLabel)
-
-        box.children.addAll(titleRow, statusRow)
-
-        box.setOnMouseClicked { _ -> //clicking the order tile will open a different window with order details
-            openOrderDetails(order)
-        }
-
-        return box
-    }
-
-    private fun openOrderDetails(order: Order) { //change the scene root to order details view
+    fun openOrderDetails(order: Order) { //change the scene root to order details view
         try {
             val loader = FXMLLoader(javaClass.getResource("/org/metrostate/ics/ordertrackingappkotlin/order-details-view.fxml"))
             val detailsRoot = loader.load<Parent>()
