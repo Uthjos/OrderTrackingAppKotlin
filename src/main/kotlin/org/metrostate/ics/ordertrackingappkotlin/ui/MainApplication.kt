@@ -1,7 +1,8 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.ui
 
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
 
@@ -9,13 +10,13 @@ class MainApplication : Application() {
     private var mainViewController: MainViewController? = null
 
     companion object {
-        var mainViewRoot: javafx.scene.Parent? = null
+        var mainViewRoot: Parent? = null
             private set
     }
 
     override fun start(stage: Stage) {
-        val fxmlLoader = FXMLLoader(MainApplication::class.java.getResource("main-view.fxml"))
-        val root = fxmlLoader.load<javafx.scene.Parent>()
+        val fxmlLoader = FXMLLoader(MainApplication::class.java.getResource("/org/metrostate/ics/ordertrackingappkotlin/main-view.fxml"))
+        val root = fxmlLoader.load<Parent>()
 
         mainViewRoot = root
 

@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_LEFT" prefHeight="700.0" prefWidth="500.0" spacing="12.0" style="-fx-padding: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.metrostate.ics.ordertrackingappkotlin.OrderDetailsController">
-    <Label fx:id="titleLabel" text="Order Details">
-        <font>
-            <Font size="20" />
-        </font>
+<VBox alignment="TOP_LEFT" prefHeight="700.0" prefWidth="550.0" spacing="15.0" style="-fx-padding: 20; -fx-background-color: #e8e8e8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.metrostate.ics.ordertrackingappkotlin.ui.OrderDetailsController">
+    <Label fx:id="titleLabel" text="Order Details" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+        <VBox.margin>
+            <Insets bottom="10.0" />
+        </VBox.margin>
     </Label>
 
-    <TextArea fx:id="orderInfo" editable="false" wrapText="true" VBox.vgrow="ALWAYS" />
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: white; -fx-background-color: white; -fx-border-color: #c0c0c0; -fx-border-width: 1.5; -fx-border-radius: 8; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 5, 0, 0, 2);">
+        <VBox fx:id="orderDetailsContainer" spacing="20.0" style="-fx-background-color: white; -fx-padding: 25;">
+        </VBox>
+    </ScrollPane>
 
-    <HBox alignment="CENTER_RIGHT" spacing="8">
-        <Region HBox.hgrow="ALWAYS" />
-        <Button onAction="#close" text="Close" />
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button onAction="#close" text="← Back" style="-fx-background-color: #424242; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 8 20 8 20; -fx-background-radius: 6; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(66,66,66,0.3), 4, 0, 0, 2);">
+            <HBox.margin>
+                <Insets top="5.0" />
+            </HBox.margin>
+        </Button>
     </HBox>
 </VBox>

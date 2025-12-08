@@ -1,4 +1,4 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.ui
 
 import javafx.fxml.FXML
 import javafx.geometry.Insets
@@ -6,6 +6,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.Separator
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.metrostate.ics.ordertrackingappkotlin.order.*
 import java.time.Instant
@@ -22,7 +23,7 @@ class OrderDetailsController {
 
 
     // functions here to handle status update buttons / dynamic button visibility based on current status
-    
+
 
 
     fun setOrderDetails(order: Order) {
@@ -89,7 +90,7 @@ class OrderDetailsController {
 
                 val nameLabel = Label(item.name)
                 nameLabel.style = "-fx-font-size: 14; -fx-text-fill: #1a1a1a;"
-                HBox.setHgrow(nameLabel, javafx.scene.layout.Priority.ALWAYS)
+                HBox.setHgrow(nameLabel, Priority.ALWAYS)
 
                 val priceLabel = Label(String.format("$%.2f/ea", item.price))
                 priceLabel.style = "-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"
@@ -133,7 +134,7 @@ class OrderDetailsController {
         } else {
             "-fx-font-size: 14; -fx-text-fill: #666666;"
         }
-        HBox.setHgrow(labelNode, javafx.scene.layout.Priority.ALWAYS)
+        HBox.setHgrow(labelNode, Priority.ALWAYS)
 
         val valueNode = Label(String.format("$%.2f", amount))
         valueNode.style = if (isTotal) {
