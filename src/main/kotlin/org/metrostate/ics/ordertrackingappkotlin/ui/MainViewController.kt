@@ -13,7 +13,7 @@ import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.layout.*
 import javafx.scene.text.Text
-import org.metrostate.ics.ordertrackingappkotlin.Directory
+import org.metrostate.ics.ordertrackingappkotlin.directory.Directory
 import org.metrostate.ics.ordertrackingappkotlin.OrderListener
 import org.metrostate.ics.ordertrackingappkotlin.Status
 import org.metrostate.ics.ordertrackingappkotlin.Type

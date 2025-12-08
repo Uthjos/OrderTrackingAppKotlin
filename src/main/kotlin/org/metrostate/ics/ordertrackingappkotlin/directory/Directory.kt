@@ -1,4 +1,4 @@
-package org.metrostate.ics.ordertrackingappkotlin
+package org.metrostate.ics.ordertrackingappkotlin.directory
 
 import java.io.File
 import java.io.IOException
@@ -52,7 +52,7 @@ enum class Directory(
          * will Delete all files in the directory in argument
          */
         fun deleteFilesInDirectory(directory: Directory) {
-            var fileDir: File = File(Directory.getDirectory(directory))
+            var fileDir: File = File(getDirectory(directory))
             var files: Array<File>? = fileDir.listFiles()
 
             if (files != null) {
@@ -94,8 +94,8 @@ enum class Directory(
          * will Copy all Files in a Directory to another
          */
         fun backupFilesInDirectory(copyFromDir: Directory, destDir: Directory) {
-            val sourceDir = File(Directory.getDirectory(copyFromDir))
-            val targetDir = File(Directory.getDirectory(destDir))
+            val sourceDir = File(getDirectory(copyFromDir))
+            val targetDir = File(getDirectory(destDir))
 
             val files = sourceDir.listFiles() ?: return
 
