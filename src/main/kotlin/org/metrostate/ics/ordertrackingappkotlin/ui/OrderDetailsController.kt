@@ -164,6 +164,8 @@ class OrderDetailsController {
                 // Refresh the main view to show any status changes
                 mainViewController?.populateOrderTiles()
 
+                //saveStateonExit here
+
                 val scene = orderDetailsContainer.scene
                 scene.root = mainViewRoot
             } else {
