@@ -2,7 +2,7 @@ package org.metrostate.ics.ordertrackingappkotlin.order
 
 import org.json.JSONArray
 import org.json.JSONObject
-import org.metrostate.ics.ordertrackingappkotlin.Status
+import org.metrostate.ics.ordertrackingappkotlin.order.Status
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException

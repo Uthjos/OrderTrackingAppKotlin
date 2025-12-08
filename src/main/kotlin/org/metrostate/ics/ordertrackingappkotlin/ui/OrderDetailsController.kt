@@ -8,7 +8,7 @@ import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import javafx.scene.layout.*
 import org.metrostate.ics.ordertrackingappkotlin.order.*
-import org.metrostate.ics.ordertrackingappkotlin.Status
+import org.metrostate.ics.ordertrackingappkotlin.order.Status
 import javafx.scene.control.Button
 import java.time.Instant
 import java.time.ZoneId

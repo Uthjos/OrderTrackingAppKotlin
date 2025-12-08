@@ -2,6 +2,7 @@ package org.metrostate.ics.ordertrackingappkotlin
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.metrostate.ics.ordertrackingappkotlin.order.Type
 
 class TypeTest {
     @Test

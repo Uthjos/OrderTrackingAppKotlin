@@ -3,6 +3,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.metrostate.ics.ordertrackingappkotlin.*
 import org.metrostate.ics.ordertrackingappkotlin.order.FoodItem
+import org.metrostate.ics.ordertrackingappkotlin.order.Status
+import org.metrostate.ics.ordertrackingappkotlin.order.Type
 import java.io.File
 
 class JSONParserTest {
