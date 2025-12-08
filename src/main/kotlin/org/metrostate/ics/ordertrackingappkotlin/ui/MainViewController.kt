@@ -255,7 +255,8 @@ class MainViewController {
      * @return      The VBox corresponding to the order, or null
     </id> */
     private fun findOrderBoxForOrder(node:Node, order: Order?): VBox? {
-      for (node in ordersContainer.children) {
+        if(node is Pane)
+      for (node in node.children) {
           if (node is Label &&  node.text.contains(order?.orderID.toString())) {
               return node.parent as VBox?
           }
