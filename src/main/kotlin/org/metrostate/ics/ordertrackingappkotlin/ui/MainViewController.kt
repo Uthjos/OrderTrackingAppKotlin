@@ -13,6 +13,7 @@ import javafx.scene.layout.*
 import org.metrostate.ics.ordertrackingappkotlin.directory.Directory
 import org.metrostate.ics.ordertrackingappkotlin.OrderListener
 import org.metrostate.ics.ordertrackingappkotlin.directory.SaveState
+import org.metrostate.ics.ordertrackingappkotlin.directory.SaveState.Companion.handleImportOrders
 import org.metrostate.ics.ordertrackingappkotlin.order.Status
 import org.metrostate.ics.ordertrackingappkotlin.order.Type
 import org.metrostate.ics.ordertrackingappkotlin.order.Order
@@ -81,7 +82,7 @@ class MainViewController {
             orders.add(order)
             populateOrderTiles()
 
-            SaveState.handleImportOrders(file, order)
+            handleImportOrders(file, order)
 
         } catch (e: Exception) {
             e.printStackTrace()
