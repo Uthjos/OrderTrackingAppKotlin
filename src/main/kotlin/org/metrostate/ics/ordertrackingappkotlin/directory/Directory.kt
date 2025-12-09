@@ -67,7 +67,15 @@ enum class Directory(
          * will Delete specific File in argument
          */
         fun deleteFile(file: File) {
-            // try deleting original up to 4 times with longer delay each time
+            // try deleting regularly first
+            try {
+                if (Files.deleteIfExists(file.toPath()) || !file.exists()) {
+                    return
+                }
+            } catch (_: IOException) {
+
+            }
+            //didn't work, try several times with delay
             var deleted = false
             for (attempt in 1..4) {
                 try {
@@ -79,7 +87,7 @@ enum class Directory(
 
 
                 try {
-                    Thread.sleep((100 * attempt).toLong())
+                    Thread.sleep((10 * attempt).toLong())
                 } catch (_: InterruptedException) {
                     Thread.currentThread().interrupt()
                     break
