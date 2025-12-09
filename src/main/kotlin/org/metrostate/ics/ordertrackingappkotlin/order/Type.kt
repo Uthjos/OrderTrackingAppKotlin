@@ -1,7 +1,7 @@
 package org.metrostate.ics.ordertrackingappkotlin.order
 
 /**
- * Order types.
+ * Order types Enum class
  */
 enum class Type(val color: String) {
     TOGO("#6a1b9a"),        // Purple

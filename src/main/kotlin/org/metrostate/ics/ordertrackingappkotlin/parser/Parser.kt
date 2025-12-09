@@ -16,6 +16,9 @@ import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
 
 interface Parser {
+    /**
+     * Parse a serializable file
+     */
     @Throws(IOException::class)
     fun parse(file: File) : Order
 
@@ -84,6 +87,9 @@ fun restoreOrderByType(
     return order
 }
 
+/**
+ * Parser class for imported JSON files
+ */
 class JSONParser : Parser {
     override fun parse(file: File) : Order {
         val orderDate: Long
@@ -137,6 +143,9 @@ class JSONParser : Parser {
     }
 }
 
+/**
+ * Parser class for XML files
+ */
 class XMLParser : Parser {
     override fun parse(file: File) : Order {
         var orderDate: Long = 0
@@ -210,6 +219,9 @@ class XMLParser : Parser {
     }
 }
 
+/**
+ * Parser class for saved JSON files in program
+ */
 class SavedJSONParser : Parser {
     override fun parse(file: File) : Order {
         val orderId: Int

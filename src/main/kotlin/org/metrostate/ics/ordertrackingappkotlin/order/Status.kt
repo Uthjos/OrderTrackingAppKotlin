@@ -1,7 +1,7 @@
 package org.metrostate.ics.ordertrackingappkotlin.order
 
 /**
- * Order statuses.
+ * Order statuses Enum class
  */
 enum class Status(val color: String) {
     CANCELLED("#c62828"),   // Red
