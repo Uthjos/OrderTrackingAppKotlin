@@ -1,18 +1,17 @@
 package org.metrostate.ics.ordertrackingappkotlin.ui
 
+import javafx.application.Platform
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.geometry.Insets
-import javafx.scene.control.Label
-import javafx.scene.control.Separator
-import javafx.scene.control.Alert
-import javafx.scene.control.ButtonType
+import javafx.scene.control.*
 import javafx.scene.layout.*
 import org.metrostate.ics.ordertrackingappkotlin.order.*
-import org.metrostate.ics.ordertrackingappkotlin.order.Status
-import javafx.scene.control.Button
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+
 
 /**
  * Controller for the Order Details view.
@@ -33,6 +32,8 @@ class OrderDetailsController {
     var completeButton = Button()
     @FXML
     var resubmitButton = Button()
+    @FXML
+    var adjustTipButton = Button()
 
 
     private var currentOrder: Order? = null
@@ -124,6 +125,7 @@ class OrderDetailsController {
         completeButton.isVisible = order.status == Status.IN_PROGRESS
         cancelButton.isVisible = order.status != Status.COMPLETED && order.status != Status.CANCELLED
         resubmitButton.isVisible = order.status == Status.CANCELLED
+        adjustTipButton.isVisible = order is DineInOrder
     }
 
     @FXML
@@ -162,6 +164,61 @@ class OrderDetailsController {
     private fun handleResubmit() {
         currentOrder?.status = Status.WAITING
         currentOrder?.let { setOrderDetails(it) }
+    }
+
+    @FXML
+    @Suppress("UNUSED")
+    private fun handleAdjustTip(){
+        currentOrder is DineInOrder //we only want to adjust dine ins
+
+        val showPopupButton = Button("Show Popup")
+        val displayLabel = Label()
+
+
+        showPopupButton.onAction = EventHandler { _: ActionEvent? ->
+            val dialog = TextInputDialog("0.00")
+            dialog.title = "Enter Tip Amount"
+            dialog.headerText = "Enter tip value (dollars and cents)"
+            dialog.contentText = "Tip:"
+
+            val editor = dialog.editor
+            editor.text = "0.00"
+
+            // Filter to only allow digits
+            editor.textProperty().addListener { _, oldValue, newValue ->
+                if (!newValue.matches(Regex("\\d*"))) {
+                    editor.text = oldValue
+                    return@addListener
+                }
+                if (newValue.length > 5) {
+                    editor.text = oldValue
+                    return@addListener
+                }
+                if (newValue.isEmpty()) {
+                    editor.text = "0.00"
+                } else {
+                    val cents = newValue.toIntOrNull() ?: 0
+                    val dollars = cents / 100
+                    val remainingCents = cents % 100
+                    editor.text = String.format("%d.%02d", dollars, remainingCents)
+                }
+            }
+
+            // Position cursor at the end
+
+
+            Platform.runLater {
+                editor.positionCaret(editor.text.length)
+            }
+
+            val result = dialog.showAndWait()
+
+            if (result.isPresent) {
+                val tipValue = result.get().toDoubleOrNull() ?: 0.0
+                currentOrder?.setKitchenTip(tipValue)
+                displayLabel.text = String.format("$%.2f", tipValue)
+            }
+        }
     }
 
     private fun addInfoRow(grid: GridPane, row: Int, label: String, value: String, valueColor: String? = null) {
