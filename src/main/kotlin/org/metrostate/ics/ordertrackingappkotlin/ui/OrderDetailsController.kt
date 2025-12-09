@@ -1,8 +1,6 @@
 package org.metrostate.ics.ordertrackingappkotlin.ui
 
-import javafx.application.Platform
-import javafx.event.ActionEvent
-import javafx.event.EventHandler
+
 import javafx.fxml.FXML
 import javafx.geometry.Insets
 import javafx.scene.control.*
@@ -177,26 +175,21 @@ class OrderDetailsController {
 
         val displayLabel = Label()
 
-            val dialog = TextInputDialog()
-            dialog.title = "Enter Tip Amount"
-            dialog.headerText = "Enter tip value (dollars and cents)"
-            dialog.contentText = "Tip:"
+        val dialog = TextInputDialog()
+        dialog.title = "Enter Tip Amount"
+        dialog.headerText = "Enter tip value (dollars and cents)"
+        dialog.contentText = "Tip:"
+        val result = dialog.showAndWait()
 
-            val editor = dialog.editor
+        if (result.isPresent) {
+            val tipValue = result.get().toDoubleOrNull() ?: 0.0
 
-            // Filter to only allow digits
-
-
-
-            // Position cursor at the end
-
-            val result = dialog.showAndWait()
-
-            if (result.isPresent) {
-                val tipValue = result.get().toDoubleOrNull() ?: 0.0
-                currentOrder?.setKitchenTip(tipValue)
-                displayLabel.text = String.format("$%.2f", tipValue)
-            }
+            val kitTip = tipValue* .95
+            val serTip = tipValue - kitTip
+            currentOrder?.setKitchenTip(kitTip)
+            currentOrder?.setServerTip(serTip)
+            displayLabel.text = String.format("$%.2f", tipValue)
+        }
         currentOrder?.let { setOrderDetails(it) }
 
     }

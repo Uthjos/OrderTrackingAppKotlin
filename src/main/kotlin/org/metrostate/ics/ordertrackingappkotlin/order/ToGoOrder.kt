@@ -1,8 +1,5 @@
 package org.metrostate.ics.ordertrackingappkotlin.order
 
-import org.metrostate.ics.ordertrackingappkotlin.order.Status
-import org.metrostate.ics.ordertrackingappkotlin.order.Type
-
 /**
  * Represents a to-go order.
  * To-go orders only support kitchen tips.
@@ -10,13 +7,7 @@ import org.metrostate.ics.ordertrackingappkotlin.order.Type
 class ToGoOrder : Order {
 
     private var kitchenTip: Double = 0.0
-
-    constructor() {
-        this.foodList = ArrayList()
-        this.status = Status.WAITING
-        this.type = Type.TOGO
-        this.company = null
-    }
+    private var driverTip: Double = 0.0
 
     /**
      * Create new order
@@ -52,18 +43,28 @@ class ToGoOrder : Order {
         this.kitchenTip = kitchenTip
     }
 
-    override fun getKitchenTip(): Double = kitchenTip
+    override fun getKitchenTip(): Double {
+        return kitchenTip
+    }
 
     override fun setKitchenTip(amount: Double) {
         kitchenTip = amount
     }
 
+    override fun getServerTip(): Double {
+        return driverTip
+    }
+
+    override fun setServerTip(amount: Double) {
+        driverTip = amount
+    }
+
     override fun getTotalTips(): Double {
-        return kitchenTip
+        return driverTip + kitchenTip
     }
 
     override fun calculateGrandTotal(): Double {
-        return totalPrice + getTotalTips()
+        return totalPrice
     }
 
     override fun toString(): String {

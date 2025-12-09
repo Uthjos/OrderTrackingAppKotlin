@@ -1,8 +1,5 @@
 package org.metrostate.ics.ordertrackingappkotlin.order
 
-import org.metrostate.ics.ordertrackingappkotlin.order.Status
-import org.metrostate.ics.ordertrackingappkotlin.order.Type
-
 /**
  * Represents a dine-in order.
  * Dine-in orders support kitchen tips and server tips.
@@ -11,14 +8,6 @@ class DineInOrder : Order {
 
     private var kitchenTip: Double = 0.0
     private var serverTip: Double = 0.0
-
-
-    constructor() {
-        this.foodList = ArrayList()
-        this.status = Status.WAITING
-        this.type = Type.DINE_IN
-        this.company = null
-    }
 
     /**
      * Create new order
@@ -62,10 +51,10 @@ class DineInOrder : Order {
         kitchenTip = amount
     }
 
-    fun getServerTip(): Double = serverTip
+    override fun getServerTip(): Double = serverTip
 
 
-    fun setServerTip(amount: Double) {
+    override fun setServerTip(amount: Double) {
         serverTip = amount
     }
 
