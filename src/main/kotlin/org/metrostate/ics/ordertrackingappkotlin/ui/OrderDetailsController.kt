@@ -175,43 +175,20 @@ class OrderDetailsController {
     private fun handleAdjustTip(){
         currentOrder is DineInOrder //we only want to adjust dine ins
 
-        val showPopupButton = Button("Show Popup")
         val displayLabel = Label()
 
-            val dialog = TextInputDialog("0.00")
+            val dialog = TextInputDialog()
             dialog.title = "Enter Tip Amount"
             dialog.headerText = "Enter tip value (dollars and cents)"
             dialog.contentText = "Tip:"
 
             val editor = dialog.editor
-            editor.text = "0.00"
 
             // Filter to only allow digits
-            editor.textProperty().addListener { _, oldValue, newValue ->
-                if (!newValue.matches(Regex("\\d*"))) {
-                    editor.text = oldValue
-                    return@addListener
-                }
-                if (newValue.length > 5) {
-                    editor.text = oldValue
-                    return@addListener
-                }
-                if (newValue.isEmpty()) {
-                    editor.text = "0.00"
-                } else {
-                    val cents = newValue.toIntOrNull() ?: 0
-                    val dollars = cents / 100
-                    val remainingCents = cents % 100
-                    editor.text = String.format("%d.%02d", dollars, remainingCents)
-                }
-            }
+
+
 
             // Position cursor at the end
-
-
-            Platform.runLater {
-                editor.positionCaret(editor.text.length)
-            }
 
             val result = dialog.showAndWait()
 
@@ -220,6 +197,7 @@ class OrderDetailsController {
                 currentOrder?.setKitchenTip(tipValue)
                 displayLabel.text = String.format("$%.2f", tipValue)
             }
+        currentOrder?.let { setOrderDetails(it) }
 
     }
 
