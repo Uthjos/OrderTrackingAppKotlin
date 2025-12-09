@@ -174,8 +174,6 @@ class OrderDetailsController {
         val showPopupButton = Button("Show Popup")
         val displayLabel = Label()
 
-
-        showPopupButton.onAction = EventHandler { _: ActionEvent? ->
             val dialog = TextInputDialog("0.00")
             dialog.title = "Enter Tip Amount"
             dialog.headerText = "Enter tip value (dollars and cents)"
@@ -218,7 +216,7 @@ class OrderDetailsController {
                 currentOrder?.setKitchenTip(tipValue)
                 displayLabel.text = String.format("$%.2f", tipValue)
             }
-        }
+
     }
 
     private fun addInfoRow(grid: GridPane, row: Int, label: String, value: String, valueColor: String? = null) {
