@@ -1,6 +1,8 @@
 package org.metrostate.ics.ordertrackingappkotlin.directory
 
+import org.metrostate.ics.ordertrackingappkotlin.order.Order
 import org.metrostate.ics.ordertrackingappkotlin.order.OrderDriver
+import java.io.File
 import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -23,6 +25,11 @@ class SaveState {
 
             Directory.deleteFilesInDirectory(Directory.savedOrders)
             Directory.deleteFilesInDirectory(Directory.importOrders)
+        }
+
+        fun handleImportOrders (file: File, order: Order){
+            OrderDriver.orderExportJSON(order, Directory.getDirectory(Directory.savedOrders))
+            Directory.deleteFile(file)
         }
     }
 
