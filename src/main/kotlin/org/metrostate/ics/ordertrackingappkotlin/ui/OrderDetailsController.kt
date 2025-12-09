@@ -127,7 +127,7 @@ class OrderDetailsController {
         completeButton.isVisible = order.status == Status.IN_PROGRESS
         cancelButton.isVisible = order.status != Status.COMPLETED && order.status != Status.CANCELLED
         resubmitButton.isVisible = order.status == Status.CANCELLED
-        adjustTipButton.isVisible = order is DineInOrder
+        adjustTipButton.isVisible = order is DineInOrder && !(order.status == Status.CANCELLED || order.status == Status.COMPLETED)
     }
 
     @FXML
@@ -184,13 +184,13 @@ class OrderDetailsController {
         if (result.isPresent) {
             val tipValue = result.get().toDoubleOrNull() ?: 0.0
 
-            val kitTip = tipValue* .95
+            val kitTip = tipValue* .20
             val serTip = tipValue - kitTip
             currentOrder?.setKitchenTip(kitTip)
             currentOrder?.setServerTip(serTip)
             displayLabel.text = String.format("$%.2f", tipValue)
         }
-        currentOrder?.let { setOrderDetails(it) }
+        currentOrder?.let { setOrderDetails(it,true)}
 
     }
 
