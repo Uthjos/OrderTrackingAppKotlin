@@ -38,7 +38,11 @@ class OrderDetailsController {
 
     private var currentOrder: Order? = null
 
-    fun setOrderDetails(order: Order) {
+    fun setOrderDetails(order: Order, updated : Boolean = false) {
+        if (updated) {
+            //save to new savedOrders
+            OrderDriver.orderExportJSON(order, org.metrostate.ics.ordertrackingappkotlin.directory.Directory.getDirectory(org.metrostate.ics.ordertrackingappkotlin.directory.Directory.savedOrders) )
+            }
         currentOrder = order
         titleLabel.text = "Order #${order.orderID}"
         orderDetailsContainer.children.clear()
@@ -132,14 +136,14 @@ class OrderDetailsController {
     @Suppress("UNUSED")
     private fun handleStart() {
         currentOrder?.status = Status.IN_PROGRESS
-        currentOrder?.let { setOrderDetails(it) }
+        currentOrder?.let { setOrderDetails(it, true) }
     }
 
     @FXML
     @Suppress("UNUSED")
     private fun handleComplete() {
         currentOrder?.status = Status.COMPLETED
-        currentOrder?.let { setOrderDetails(it) }
+        currentOrder?.let { setOrderDetails(it, true) }
     }
 
     @FXML
@@ -155,7 +159,7 @@ class OrderDetailsController {
         val result = alert.showAndWait()
         if (result.isPresent && result.get() == ButtonType.YES) {
             order.status = Status.CANCELLED
-            setOrderDetails(order)
+            setOrderDetails(order, true)
         }
     }
 
@@ -163,7 +167,7 @@ class OrderDetailsController {
     @Suppress("UNUSED")
     private fun handleResubmit() {
         currentOrder?.status = Status.WAITING
-        currentOrder?.let { setOrderDetails(it) }
+        currentOrder?.let { setOrderDetails(it, true) }
     }
 
     @FXML
