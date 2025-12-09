@@ -1,8 +1,5 @@
 package org.metrostate.ics.ordertrackingappkotlin.order
 
-import org.metrostate.ics.ordertrackingappkotlin.order.Status
-import org.metrostate.ics.ordertrackingappkotlin.order.Type
-
 /**
  * Represents a delivery order.
  * Delivery orders support kitchen tips and driver tips.
@@ -55,17 +52,28 @@ class DeliveryOrder : Order {
         this.driverTip = driverTip
     }
 
-    override fun getKitchenTip(): Double = kitchenTip
-
-    override fun setKitchenTip(amount: Double) {
-        kitchenTip = amount
-    }
 
 
     fun getDriverTip(): Double = driverTip
 
     fun setDriverTip(amount: Double) {
         driverTip = amount
+    }
+
+    override fun getKitchenTip(): Double {
+        return kitchenTip
+    }
+
+    override fun setKitchenTip(amount: Double) {
+        kitchenTip =amount
+    }
+
+    override fun getServerTip(): Double {
+        return getDriverTip()
+    }
+
+    override fun setServerTip(amount: Double) {
+        setDriverTip(amount)
     }
 
     override fun getTotalTips(): Double {

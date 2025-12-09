@@ -10,6 +10,10 @@ interface TippableOrder {
 
     fun setKitchenTip(amount: Double)
 
+    fun getServerTip(): Double
+
+    fun setServerTip(amount: Double)
+
     fun getTotalTips(): Double
 
     fun calculateGrandTotal(): Double
