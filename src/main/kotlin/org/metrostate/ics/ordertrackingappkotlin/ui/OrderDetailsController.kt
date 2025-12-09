@@ -127,7 +127,7 @@ class OrderDetailsController {
         completeButton.isVisible = order.status == Status.IN_PROGRESS
         cancelButton.isVisible = order.status != Status.COMPLETED && order.status != Status.CANCELLED
         resubmitButton.isVisible = order.status == Status.CANCELLED
-        adjustTipButton.isVisible = order is DineInOrder && !(order.status == Status.CANCELLED || order.status == Status.COMPLETED)
+        adjustTipButton.isVisible = order is DineInOrder && !(order.status == Status.CANCELLED)
     }
 
     @FXML
